@@ -2,17 +2,40 @@
 <html>
   <head>
     <title><%= title %></title>
-    <link href="/stylesheets/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.rtl.css">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap-grid.css">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap-grid.rtl.css">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap-reboot.css">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap-reboot.rtl.css">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap-utilities.css">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap-utilities.rtl.css">
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.esm.js"></script>
   </head>
   <body>
-      <div class="diff aspect-[16/9]">
-        <div class="diff-item-1">
-          <div class="bg-primary text-primary-content text-9xl font-black grid place-content-center">Recognition</div>
-        </div>
-        <div class="diff-item-2">
-          <div class="bg-base-200 text-9xl font-black grid place-content-center">Plant</div>
-        </div>
-        <div class="diff-resizer"></div>
+  <div class="container">
+
+<!--        Navbar-->
+    <nav class="navbar bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand">Plant Recognition</a>
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
       </div>
+    </nav>
+
+<!--    Carousel-->
+    <div class="d-flex flex-column justify-content-center align-items-center">
+    <h1>Content Loading</h1>
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    </div>
+
+  </div>
   </body>
 </html>
