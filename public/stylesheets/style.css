@@ -24,3 +24,7 @@ body{
 .custom-button:hover {
     background-color: #e2e2e2; /* Change to your desired hover color */
 }
+
+.custom-ul-text-white li.nav-item a.nav-link {
+    color: white; /* Set text color to white */
+}
