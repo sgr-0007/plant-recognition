@@ -28,3 +28,23 @@ body{
 .custom-ul-text-white li.nav-item a.nav-link {
     color: white; /* Set text color to white */
 }
+
+
+/* For larger screens, hide the footer by default */
+@media (min-width: 992px) {
+    .footer {
+        display: none;
+    }
+}
+
+/* For smaller screens, show the footer at the bottom of the viewport */
+@media (max-width: 991.98px) {
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000; /* Ensure it's on top of other content */
+    }
+}
+

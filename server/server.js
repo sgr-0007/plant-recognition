@@ -1,11 +1,18 @@
 // server.js
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
+
 
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 const URI = "mongodb+srv://faiqiqbal37:plant1234@plant-recognition.abudcv7.mongodb.net/";
+
+
+app.use(cors({
+    origin: 'http://localhost:3000',
+}));
 
 // Connect to MongoDB
 mongoose.connect(URI, {
