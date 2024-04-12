@@ -85,7 +85,8 @@ function generateRandomID() {
 exports.getAllPlants = async (req, res) => {
   try {
     const plants = await Plant.find();
-    res.json(plants);
+    const plantDetails = await PlantDetails.find();
+    res.json({ plants, plantDetails });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

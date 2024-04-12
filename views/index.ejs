@@ -102,7 +102,6 @@
               />
             </div>
           </form>
-
           <form role="search">
             <div class="d-flex justify-content-center align-items-center">
               <p class="text-white mx-0 mb-0">Sort</p>
@@ -562,6 +561,8 @@
       </div> -->
 
       <!-- Cards -->
+      <% if (plants && Array.isArray(plants.plants)) { %>
+        <% plants.plants.forEach(plant => { %>
       <div class="card my-1" style="width: 60%">
         <div class="card-header">
           <div class="d-flex justify-content-between align-items-center">
@@ -580,7 +581,8 @@
                   d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"
                 />
               </svg>
-              <p class="m-0 mx-2">Username</p>
+
+              <p class="m-0 mx-2"><%= plant.createdby %></p>
             </div>
             <div class="d-flex align-items-center">
               <p class="m-0">Status: Incomplete</p>
@@ -604,20 +606,17 @@
         </div>
         <!-- Plant image -->
         <img
-          src="images/plant2.jpg"
+          src="<%= plant.image %>"
           class="card-img-top align-items-center"
-          alt="..."
+          alt="Plant image"
           style="width: auto; height: 500px"
         />
         <div class="card-body">
           <!-- Plant name -->
-          <h5 class="card-title">Special plant</h5>
+          <h5 class="card-title"><%= plant.name %></h5>
           <!-- Plant description -->
           <p class="card-text">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book
+            <%= plant.description%>
           </p>
         </div>
         <div class="card-footer text-body-secondary">
@@ -693,7 +692,10 @@
           </div>
         </div>
       </div>
-
+      <% }); %>
+      <% } else { %>
+        <p>No plants data available.</p>
+      <% } %>
       <!-- Card 2  -->
       <div class="card my-1" style="width: 60%">
         <div class="card-header">
