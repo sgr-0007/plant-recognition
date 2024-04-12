@@ -48,3 +48,10 @@ body{
     }
 }
 
+
+@font-face {
+    font-family: 'Growing Garden';
+    src: url('/fonts/GrowingGarden.ttf') format('truetype');
+    font-weight: normal;
+    font-size: normal;
+}
