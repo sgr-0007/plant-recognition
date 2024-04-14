@@ -40,8 +40,8 @@ exports.createPlant = async (req, res) => {
         latitude,
         longitude,
         createdby,
-        createddate // You may need to parse this if it's coming as a string
-        // Add other fields as needed
+        createddate, // You may need to parse this if it's coming as a string
+        likes: 0
     }], { session });
 
     // Create the new plant details
@@ -104,3 +104,21 @@ exports.getPlantById = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.updateLikeCount = async (req, res) =>{
+  try{
+    const { plantid } = req.params;
+
+    const plant = await Plant.findById(plantid);
+    if(!plant) {
+      return res.status(404).json({ message: "Plant not found" });
+    }
+    plant.likes += 1;
+    await plant.save();
+    res.json({ likes: plant.likes });
+  }
+  catch(err){
+    console.error("Error updating likes:", error);
+    res.status(500).json({ message: "Failed to update likes" });
+  }
+}

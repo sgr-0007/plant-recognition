@@ -25,4 +25,6 @@ router.get('/', plantController.getAllPlants);
 
 router.get('/:plantid', plantController.getPlantById);
 
+router.post('/:plantid/like', plantController.getPlantById);
+
 module.exports = router;

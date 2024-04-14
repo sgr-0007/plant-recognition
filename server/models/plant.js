@@ -9,7 +9,8 @@ const plantSchema = new mongoose.Schema({
     latitude: { type: Number },
     longitude: { type: Number },
     createdby: { type: String },
-    createddate: { type: Date, default: Date.now }
+    createddate: { type: Date, default: Date.now },
+    likes: {type: Number, default: 0}
 });
 
 module.exports = mongoose.model('Plant', plantSchema);
