@@ -26,13 +26,16 @@ app.use(express.json());
 const plantRoutes = require('./routes/plantRoutes');
 // const plantIdentificationRoutes = require('./routes/plantIdentificationRoutes');
 // const plantCommentRoutes = require('./routes/plantCommentRoutes');
-// const plantDetailsRoutes = require('./routes/plantDetailsRoutes');
+const plantDetailsRoutes = require('./routes/plantDetailsRoutes');
+
 
 // Routes
 app.use('/api/plants', plantRoutes);
+app.use('/api/plant_details', plantDetailsRoutes);
 // app.use('/api/plant_identifications', plantIdentificationRoutes);
+
+
 // app.use('/api/plant_comments', plantCommentRoutes);
-// app.use('/api/plant_details', plantDetailsRoutes);
 
 
 // Start server
