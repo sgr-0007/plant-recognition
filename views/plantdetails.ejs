@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Details</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link
+            rel="stylesheet"
+            href="/node_modules/bootstrap/dist/css/bootstrap.css"
+    />
+    <link
+            rel="stylesheet"
+            href="/node_modules/bootstrap/dist/css/bootstrap.rtl.css"
+    />
+    <link
+            rel="stylesheet"
+            href="/node_modules/bootstrap/dist/css/bootstrap-grid.css"
+    />
+    <link
+            rel="stylesheet"
+            href="/node_modules/bootstrap/dist/css/bootstrap-grid.rtl.css"
+    />
+    <link
+            rel="stylesheet"
+            href="/node_modules/bootstrap/dist/css/bootstrap-reboot.css"
+    />
+    <link
+            rel="stylesheet"
+            href="/node_modules/bootstrap/dist/css/bootstrap-reboot.rtl.css"
+    />
+    <link
+            rel="stylesheet"
+            href="/node_modules/bootstrap/dist/css/bootstrap-utilities.css"
+    />
+    <link
+            rel="stylesheet"
+            href="/node_modules/bootstrap/dist/css/bootstrap-utilities.rtl.css"
+    />
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.esm.js"></script>
+</head>
+<body style="background-color: #e2e2e2">
+
+<div class="card">
+    <div class="card-header">
+        Plant Details
+    </div>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Plant Detail ID: <%= plantDetails.plantdetailid %></li>
+            <li class="list-group-item">Height: <%= plantDetails.height %> cm</li>
+            <li class="list-group-item">Spread: <%= plantDetails.spread %> cm</li>
+            <li class="list-group-item">Has Leaves: <%= plantDetails.has_leaves ? 'Yes' : 'No' %></li>
+            <li class="list-group-item">Has Fruits or Seeds: <%= plantDetails.has_fruitsorseeds ? 'Yes' : 'No' %></li>
+            <li class="list-group-item">Flower Color: <%= plantDetails.flower_color %></li>
+            <li class="list-group-item">Plant ID: <%= plantDetails.plantid %></li>
+            <li class="list-group-item">Date/Time Seen: <%= plantDetails.date_time_plant_seen.toLocaleString() %></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
+
+
+
