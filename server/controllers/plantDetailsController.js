@@ -5,6 +5,7 @@ exports.getPlantDetailsByPlantId = async (req, res) => {
         const { plantid } = req.params;
 
         const plantDetails = await PlantDetails.findOne({ plantid: plantid });
+       console.log(plantDetails)
         if (!plantDetails) {
             return res.status(404).json({ message: "Plant not found" });
         }
