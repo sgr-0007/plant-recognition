@@ -18,19 +18,8 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/plantdetails', async (req, res) => {
-  const plantData =
-    {
-      plantdetailid: 2,
-      height: 50,
-      spread: 30,
-      has_flowers: false,
-      has_leaves: true,
-      has_fruitsorseeds: true,
-      flower_color: 'Blue',
-      plantid: 567,
-      date_time_plant_seen: new Date('2024-04-15T15:00:00'), // Example date
-    }
-    const plantid = 844;
+
+    const plantid = req.query.plantid;
   try {
       const response = await fetch(`http://localhost:5000/api/plant_details/${plantid}`);
       if (response.ok) {
