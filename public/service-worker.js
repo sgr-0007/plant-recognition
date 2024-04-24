@@ -2,16 +2,16 @@
 
 const CACHE_NAME = 'v1';
 const urlsToCache = [
-    '/',
-    '/stylesheets/style.css',
+    // '/',
+    // '/stylesheets/style.css',
     // '/views/index.ejs',
     // '/views/navbar.css',
     // '/javascripts/app.js',
     // '/javascripts/db.js',
     // '/images/logo.png',
-    '/index.ejs',
-    '/navbar.ejs',
-    '/plantdetails.ejs'
+    // '/index.ejs',
+    // '/navbar.ejs',
+    // '/plantdetails.ejs'
 ];
 
 self.addEventListener('install', (event) => {

@@ -15,17 +15,6 @@
   <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
   <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
   <script src="/node_modules/bootstrap/dist/js/bootstrap.esm.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
-          console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        }, function (err) {
-          console.log('ServiceWorker registration failed: ', err);
-        });
-      });
-    }
-  </script>
 
 </head>
 
