@@ -15,7 +15,6 @@
   <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
   <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
   <script src="/node_modules/bootstrap/dist/js/bootstrap.esm.js"></script>
-
 </head>
 
 <body style="background-color: #e2e2e2">
@@ -34,12 +33,12 @@
             </h1>
           </div>
           <div class="modal-body">
-            <form action="http://localhost:5000/api/plants" method="POST" enctype="multipart/form-data" id="plantForm">
+            <form id="plantForm" enctype="multipart/form-data" method="POST" action="/api/plantCreate">
               <!-- Name of the plant -->
               <label for="nameOfPlant" class="form-label">Name of the plant</label>
               <input type="text" class="form-control" id="nameOfPlant" name="name"
-                placeholder="Please enter the name of the plant" />
-
+                  placeholder="Please enter the name of the plant" />
+          
               <!-- Upload Image -->
               <label for="uploadImage" class="form-label my-2">Upload image</label>
               <script>
@@ -51,123 +50,80 @@
                   fileNameDisplay.textContent = file ? file.name : "";
                 }
               </script>
-              <br />
               <div class="d-flex align-items-center">
-                <label for="fileInput" class="btn btn-primary">
-                  Select from disk
-                  <input type="file" id="fileInput" name="image" class="d-none"
-                    accept="image/jpeg, image/png, image/gif" onchange="displayFileName()" />
-                </label>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                  class="mx-2 bi bi-upload" viewBox="0 0 16 16">
-                  <path
-                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
-                  <path
-                    d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
-                </svg>
-                <span id="fileNameDisplay"></span>
+                  <label for="fileInput" class="btn btn-primary">
+                      Select from disk
+                      <input type="file" id="fileInput" name="image" class="d-none"
+                          accept="image/jpeg, image/png, image/gif" onchange="displayFileName()" />
+                  </label>
+                  <span id="fileNameDisplay"></span>
               </div>
-
-              <!-- user nickname -->
+          
+              <!-- User nickname -->
               <label for="userNickname" class="form-label my-2">User nickname</label>
               <input type="text" class="form-control" id="userNickname" name="createdby"
-                placeholder="Please enter your nickname" />
-
+                  placeholder="Please enter your nickname" />
+          
               <!-- Date and time of plant seen -->
               <label for="dateAndTime" class="form-label my-2">Date and time plant was seen</label>
-              <br />
               <input type="datetime-local" id="dateTimePickerInput" class="form-control" name="date_time_plant_seen" />
-
-              <!-- plant description -->
+          
+              <!-- Plant description -->
               <label for="plantDescription" class="form-label my-2">Plant description</label>
               <input type="text" class="form-control" id="plantDescription" name="description"
-                placeholder="Enter plant description" />
-
+                  placeholder="Enter plant description" />
+          
               <!-- Plant size -->
               <!-- Plant Height -->
               <label for="plantHeight" class="form-label my-2">Plant Height</label>
               <input type="number" class="form-control" id="plantHeight"
-                placeholder="Enter estimated plant height in meters" name="height" />
-
+                  placeholder="Enter estimated plant height in meters" name="height" />
+          
               <!-- Plant spread -->
               <label for="plantSpread" class="form-label my-2">Plant Spread</label>
               <input type="number" class="form-control" id="plantSpread"
-                placeholder="Enter estimated plant spread in meters" name="spread" />
-
+                  placeholder="Enter estimated plant spread in meters" name="spread" />
+          
               <!-- Characteristics -->
               <label for="Characteristics" class="form-label my-2">Characteristics</label>
-              <br />
               <!-- Plant flowers -->
               <div class="d-flex justify-content-between align-items-center form-switch">
-                <label class="form-label" for="flowerSwitch">Does the plant have any flowers?</label>
-                <input class="form-check-input mx-5" type="checkbox" role="switch" id="flowerSwitch" name="has_flowers"
-                  value="false" />
+                  <label class="form-label" for="flowerSwitch">Does the plant have any flowers?</label>
+                  <input class="form-check-input mx-5" type="checkbox" role="switch" id="flowerSwitch" name="has_flowers"
+                      value="true" />
               </div>
-
+          
               <!-- Plant leaves  -->
               <div class="d-flex justify-content-between align-items-center form-check form-switch">
-                <label class="form-label" for="leavesSwitch">Does the plant have leaves?</label>
-                <input class="form-check-input mx-5" type="checkbox" role="switch" id="leavesSwitch" name="has_leaves"
-                  value="false" />
+                  <label class="form-label" for="leavesSwitch">Does the plant have leaves?</label>
+                  <input class="form-check-input mx-5" type="checkbox" role="switch" id="leavesSwitch" name="has_leaves"
+                      value="true" />
               </div>
-
+          
               <!-- Plant fruit seeds -->
               <div class="d-flex justify-content-between align-items-center form-check form-switch">
-                <label class="form-check-label" for="fruitSeeds">Does the plant has fruits or seeds?</label>
-                <input class="form-check-input mx-5" type="checkbox" role="switch" id="fruitSeeds"
-                  name="has_fruitsorseeds" value="false" />
+                  <label class="form-check-label" for="fruitSeeds">Does the plant have fruits or seeds?</label>
+                  <input class="form-check-input mx-5" type="checkbox" role="switch" id="fruitSeeds"
+                      name="has_fruitsorseeds" value="true" />
               </div>
-
+          
               <!-- Color of flowers -->
               <div class="d-flex justify-content-between align-items-center form-check my-1">
-                <label class="form-check-label mx-3" for="flowerColor">Color of Flower</label>
-                <input class="form-control mx-5" type="text" role="switch" id="flowerColor" style="width: 150px"
-                  placeholder="Enter flower color" name="flower_color" />
+                  <label class="form-check-label mx-3" for="flowerColor">Color of Flower</label>
+                  <input class="form-control mx-5" type="text" role="switch" id="flowerColor" style="width: 150px"
+                      placeholder="Enter flower color" name="flower_color" />
               </div>
-
+          
               <!-- Lat / Long -->
               <input type="hidden" id="latitudeInput" name="latitude" />
-              <!-- Hidden input to store latitude -->
               <input type="hidden" id="longitudeInput" name="longitude" />
-
-              <!-- Sun exposure -->
+          
               <!-- Post button -->
               <button type="submit" class="btn btn-primary my-3 custom-button" style="width: 100%" id="postButton"
-                name="submit">
-                Post!
+                  name="submit">
+                  Post!
               </button>
-
-              <!-- Post button Success Toast  -->
-
-              <div class="toast-container position-fixed bottom-0 p-3">
-                <div id="postSuccessToast" class="toast align-items-center text-bg-success border-0" role="alert"
-                  aria-live="assertive" aria-atomic="true">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="toast-body">Success! New post added!</div>
-                    <button type="button" class="btn-close btn-close-white mx-2" data-bs-dismiss="toast"
-                      aria-label="Close"></button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- End of post button Success toast -->
-
-              <!-- Post Button fail toast start -->
-
-              <div class="toast-container position-fixed bottom-0 p-3">
-                <div id="postFailureToast" class="toast align-items-center text-bg-danger border-0" role="alert"
-                  aria-live="assertive" aria-atomic="true">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="toast-body">Post failed. Please try again.</div>
-                    <button type="button" class="btn-close btn-close-white mx-2" data-bs-dismiss="toast"
-                      aria-label="Close"></button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Post button fail toast end -->
-            </form>
+          </form>
 
             <script>
               const switches = document.querySelectorAll(
@@ -261,8 +217,8 @@
       </div> -->
 
       <!-- Cards -->
-      <% if (plants && Array.isArray(plants.plants) && plants.plants.length> 0) { %>
-        <% plants.plants.reverse().forEach(plant=> { %>
+      <% if (plants && plants.length> 0) { %>
+        <% plants.reverse().forEach(plant=> { %>
           <div class="card my-1" style="width: 60%">
             <div class="card-header">
               <div class="d-flex justify-content-between align-items-center">
@@ -273,14 +229,13 @@
                     <path fill-rule="evenodd"
                       d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
                   </svg>
-
                   <p class="m-0 mx-2">
                     <%= plant.createdby %>
                   </p>
                 </div>
                 <div class="d-flex align-items-center">
                   <p class="m-0">Status: Incomplete</p>
-                  <a href="">
+                  <a href="/plantdetails?plantid=<%= plant.plantid %>">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                       class="bi bi-chevron-right mx-2" viewBox="0 0 16 16">
                       <path fill-rule="evenodd"
@@ -291,73 +246,43 @@
               </div>
             </div>
             <!-- Plant image -->
-            <img src="<%= plant.image %>" class="card-img-top align-items-center" alt="Plant image"
-              style="width: auto; height: auto; max-height: 100vh" />
-            <div class="card-body">
-              <!-- Plant name -->
-              <h5 class="card-title"> <a href="/plantdetails?plantid=<%= plant.plantid %>">
-                  <%= plant.name %>
-                </a>
-              </h5>
-              <!-- Plant description -->
-              <p class="card-text">
-                <%= plant.description%>
-              </p>
-            </div>
-            <div class="card-footer text-body-secondary">
-              <div class="d-flex justify-content-between align-items-center">
-                <!-- Separate div for likes and comments -->
-                <div class="d-flex align-items-center">
-                  <!-- Likes  -->
-                  <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                    viewBox="0 0 122.88 107.39">
-                    <defs>
-                      <style>
-                        .cls-1 {
-                          fill: #ed1b24;
-                          fill-rule: evenodd;
-                        }
-                      </style>
-                    </defs>
-                    <title>red-heart</title>
-                    <path class="cls-1"
-                      d="M60.83,17.18c8-8.35,13.62-15.57,26-17C110-2.46,131.27,21.26,119.57,44.61c-3.33,6.65-10.11,14.56-17.61,22.32-8.23,8.52-17.34,16.87-23.72,23.2l-17.4,17.26L46.46,93.55C29.16,76.89,1,55.92,0,29.94-.63,11.74,13.73.08,30.25.29c14.76.2,21,7.54,30.58,16.89Z" />
-                  </svg>
-                  <p class="m-0 mx-1">25 Likes</p>
-
-                  <!-- Comments -->
-                  <div class="d-flex">
-                    <a href="">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                        class="bi bi-chat-quote-fill mx-2" viewBox="0 0 16 16">
-                        <path
-                          d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M7.194 6.766a1.7 1.7 0 0 0-.227-.272 1.5 1.5 0 0 0-.469-.324l-.008-.004A1.8 1.8 0 0 0 5.734 6C4.776 6 4 6.746 4 7.667c0 .92.776 1.666 1.734 1.666.343 0 .662-.095.931-.26-.137.389-.39.804-.81 1.22a.405.405 0 0 0 .011.59c.173.16.447.155.614-.01 1.334-1.329 1.37-2.758.941-3.706a2.5 2.5 0 0 0-.227-.4zM11 9.073c-.136.389-.39.804-.81 1.22a.405.405 0 0 0 .012.59c.172.16.446.155.613-.01 1.334-1.329 1.37-2.758.942-3.706a2.5 2.5 0 0 0-.228-.4 1.7 1.7 0 0 0-.227-.273 1.5 1.5 0 0 0-.469-.324l-.008-.004A1.8 1.8 0 0 0 10.07 6c-.957 0-1.734.746-1.734 1.667 0 .92.777 1.666 1.734 1.666.343 0 .662-.095.931-.26z" />
-                      </svg>
-                    </a>
-                    <a href="" class="text-decoration-none text-body-secondary">
-                      <p class="m-0">Comments</p>
-                    </a>
+            <% if (plant.image) { %>
+              <img src="<%= plant.image %>" class="card-img-top align-items-center" alt="Plant image"
+                style="width: auto; height: auto; max-height: 100vh" />
+              <% } else { %>
+                <img src="placeholder-image.jpg" class="card-img-top align-items-center" alt="No image available"
+                  style="width: auto; height: auto; max-height: 100vh" />
+                <% } %>
+                  <div class="card-body">
+                    <!-- Plant name -->
+                    <h5 class="card-title"><a href="/plantdetails?plantid=<%= plant.plantid %>">
+                        <%= plant.name %>
+                      </a></h5>
+                    <!-- Plant description -->
+                    <p class="card-text">
+                      <%= plant.description %>
+                    </p>
                   </div>
-                </div>
-                <!-- Suggest -->
-                <div class="d-flex align-items-center">
-                  <a href="" class="text-decoration-none text-body-secondary">
-                    <p class="m-0">Suggest</p>
-                  </a>
-                  <a class="text-decoration-none" href="">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                      class="bi bi-flag-fill mx-2" viewBox="0 0 16 16">
-                      <path
-                        d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </div>
+                  <div class="card-footer text-body-secondary">
+                    <!-- Dummy links for likes and comments -->
+                    <div class="d-flex justify-content-between align-items-center">
+                      <!-- Likes and comments are static for display purposes -->
+                      <div class="d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 122.88 107.39">
+                          <path class="cls-1"
+                            d="M60.83,17.18c8-8.35,13.62-15.57,26-17C110-2.46,131.27,21.26,119.57,44.61c-3.33,6.65-10.11,14.56-17.61,22.32-8.23,8.52-17.34,16.87-23.72,23.2l-17.4,17.26L46.46,93.55C29.16,76.89,1,55.92,0,29.94-.63,11.74,13.73.08,30.25.29c14.76.2,21,7.54,30.58,16.89Z" />
+                        </svg>
+                        <p class="m-0 mx-1">25 Likes</p>
+                      </div>
+                      <div class="d-flex align-items-center">
+                        <p class="m-0">Suggest</p>
+                      </div>
+                    </div>
+                  </div>
           </div>
           <% }); %>
             <% } else { %>
-              <img src="images/Drought.svg" alt="Drought Images" width="35%" ; height="35%">
+              <img src="images/Drought.svg" alt="Drought Images" width="35%" height="35%">
               <h1 style="font-family: 'Growing Garden', sans-serif; font-size: 5em;">No plants found!</h1>
               <h3 style="font-family: 'Growing Garden', sans-serif; font-size: 3em;">Go find some plants!</h3>
               <% } %>
@@ -377,5 +302,18 @@
       </ul>
     </footer>
 </body>
+<!-- <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/sw.js').then(function (registration) {
+        // Registration was successful
+        console.log('Service Worker registration successful with scope: ', registration.scope);
+      }, function (err) {
+        // registration failed :(
+        console.log('Service Worker registration failed: ', err);
+      });
+    });
+  }
+</script> -->
 
 </html>
