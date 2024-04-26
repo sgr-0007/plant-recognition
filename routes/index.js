@@ -2,11 +2,28 @@ var express = require('express');
 var router = express.Router();
 const plantsController = require('../controllers/plantController');
 const multer = require('multer');
+const fs = require('fs');
 // const upload = multe;
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/images_dynamic/uploads/');
+    var directory = 'public/images_dynamic/uploads/';
+    fs.access(directory, function(error){
+      // If directory is not already created
+      if(error){
+        fs.mkdir(directory, { recursive: true }, function(error){
+          if(error){
+            console.error('Error creating directory: ',error);
+          } else{
+            console.log('Directory created successfully');
+            cb(null, directory);
+          }
+        });
+      } else{
+        //Directory already exists
+        cb(null, directory);
+      }
+    });
   },
   filename: function (req, file, cb) {
     var original = file.originalname;

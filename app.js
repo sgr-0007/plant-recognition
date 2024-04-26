@@ -9,9 +9,9 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 // MongoDB URL
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 //please enter your local MONGO creds, It's working for me. 
-const mongoDB = 'mongodb://localhost:27017/plantDB';
+const mongoDB = 'mongodb+srv://faiqiqbal37:plant1234@plant-recognition.abudcv7.mongodb.net/';
 
 // Connect to MongoDB
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
