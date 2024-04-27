@@ -40,8 +40,9 @@ const upload = multer({ storage: storage });
 
 router.get('/', async (req, res) => {
   try {
-    const plants = await plantsController.getAllPlantsHomepage(req, res);
-    res.render('index', { plants });  // Pass the array directly under the key 'plants'
+    // const plants = await plantsController.getAllPlantsHomepage(req, res);
+    var plants = []
+    res.render('index', { plants });
   } catch (err) {
     console.error('Error while fetching data:', err);
     res.render('error', { message: 'Failed to fetch plant data' });

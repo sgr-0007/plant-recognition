@@ -40,23 +40,23 @@ exports.createPlant = async (req, res) => {
       flower_color, date_time_plant_seen
     });
 
-    console.log("Plant ID:", newPlant.plantid);
-    console.log("Name:", newPlant.name);
-    console.log("Description:", newPlant.description);
-    console.log("Image:", newPlant.image);
-    console.log("Latitude:", newPlant.latitude);
-    console.log("Longitude:", newPlant.longitude);
-    console.log("Created By:", newPlant.createdby);
-    console.log("Created Date:", newPlant.createddate);
-    console.log("Height:", newPlant.height);
-    console.log("Spread:", newPlant.spread);
-    console.log("Has Flowers:", newPlant.has_flowers);
-    console.log("Has Leaves:", newPlant.has_leaves);
-    console.log("Has Fruits or Seeds:", newPlant.has_fruitsorseeds);
-    console.log("Flower Color:", newPlant.flower_color);
-    console.log("Date Time Plant Seen:", newPlant.date_time_plant_seen);
+    // console.log("Plant ID:", newPlant.plantid);
+    // console.log("Name:", newPlant.name);
+    // console.log("Description:", newPlant.description);
+    // console.log("Image:", newPlant.image);
+    // console.log("Latitude:", newPlant.latitude);
+    // console.log("Longitude:", newPlant.longitude);
+    // console.log("Created By:", newPlant.createdby);
+    // console.log("Created Date:", newPlant.createddate);
+    // console.log("Height:", newPlant.height);
+    // console.log("Spread:", newPlant.spread);
+    // console.log("Has Flowers:", newPlant.has_flowers);
+    // console.log("Has Leaves:", newPlant.has_leaves);
+    // console.log("Has Fruits or Seeds:", newPlant.has_fruitsorseeds);
+    // console.log("Flower Color:", newPlant.flower_color);
+    // console.log("Date Time Plant Seen:", newPlant.date_time_plant_seen);
 
-
+    
     await newPlant.save();
 
     res.redirect("/");  // Adjust as necessary for your URL structure
@@ -73,8 +73,9 @@ function generateRandomID() {
 exports.getAllPlantsHomepage = async (req, res) => {
   try {
     const plants = await Plant.find();  // Example, assuming Plant is your Mongoose model
-    return plants;  // Return the data to be used by the caller
+    // return plants;  // Return the data to be used by the caller
     // res.json({plants})
+    return [];
   } catch (error) {
     console.error('Error fetching plants:', error);
     throw error;  // Throw the error to be handled by the caller

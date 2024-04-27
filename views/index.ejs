@@ -37,8 +37,8 @@
               <!-- Name of the plant -->
               <label for="nameOfPlant" class="form-label">Name of the plant</label>
               <input type="text" class="form-control" id="nameOfPlant" name="name"
-                  placeholder="Please enter the name of the plant" />
-          
+                placeholder="Please enter the name of the plant" />
+
               <!-- Upload Image -->
               <label for="uploadImage" class="form-label my-2">Upload image</label>
               <script>
@@ -51,79 +51,79 @@
                 }
               </script>
               <div class="d-flex align-items-center">
-                  <label for="fileInput" class="btn btn-primary">
-                      Select from disk
-                      <input type="file" id="fileInput" name="image" class="d-none"
-                          accept="image/jpeg, image/png, image/gif" onchange="displayFileName()" />
-                  </label>
-                  <span id="fileNameDisplay"></span>
+                <label for="fileInput" class="btn btn-primary">
+                  Select from disk
+                  <input type="file" id="fileInput" name="image" class="d-none"
+                    accept="image/jpeg, image/png, image/gif" onchange="displayFileName()" />
+                </label>
+                <span id="fileNameDisplay"></span>
               </div>
-          
+
               <!-- User nickname -->
               <label for="userNickname" class="form-label my-2">User nickname</label>
               <input type="text" class="form-control" id="userNickname" name="createdby"
-                  placeholder="Please enter your nickname" />
-          
+                placeholder="Please enter your nickname" />
+
               <!-- Date and time of plant seen -->
               <label for="dateAndTime" class="form-label my-2">Date and time plant was seen</label>
               <input type="datetime-local" id="dateTimePickerInput" class="form-control" name="date_time_plant_seen" />
-          
+
               <!-- Plant description -->
               <label for="plantDescription" class="form-label my-2">Plant description</label>
               <input type="text" class="form-control" id="plantDescription" name="description"
-                  placeholder="Enter plant description" />
-          
+                placeholder="Enter plant description" />
+
               <!-- Plant size -->
               <!-- Plant Height -->
               <label for="plantHeight" class="form-label my-2">Plant Height</label>
               <input type="number" class="form-control" id="plantHeight"
-                  placeholder="Enter estimated plant height in meters" name="height" />
-          
+                placeholder="Enter estimated plant height in meters" name="height" />
+
               <!-- Plant spread -->
               <label for="plantSpread" class="form-label my-2">Plant Spread</label>
               <input type="number" class="form-control" id="plantSpread"
-                  placeholder="Enter estimated plant spread in meters" name="spread" />
-          
+                placeholder="Enter estimated plant spread in meters" name="spread" />
+
               <!-- Characteristics -->
               <label for="Characteristics" class="form-label my-2">Characteristics</label>
               <!-- Plant flowers -->
               <div class="d-flex justify-content-between align-items-center form-switch">
-                  <label class="form-label" for="flowerSwitch">Does the plant have any flowers?</label>
-                  <input class="form-check-input mx-5" type="checkbox" role="switch" id="flowerSwitch" name="has_flowers"
-                      value="true" />
+                <label class="form-label" for="flowerSwitch">Does the plant have any flowers?</label>
+                <input class="form-check-input mx-5" type="checkbox" role="switch" id="flowerSwitch" name="has_flowers"
+                  value="true" />
               </div>
-          
+
               <!-- Plant leaves  -->
               <div class="d-flex justify-content-between align-items-center form-check form-switch">
-                  <label class="form-label" for="leavesSwitch">Does the plant have leaves?</label>
-                  <input class="form-check-input mx-5" type="checkbox" role="switch" id="leavesSwitch" name="has_leaves"
-                      value="true" />
+                <label class="form-label" for="leavesSwitch">Does the plant have leaves?</label>
+                <input class="form-check-input mx-5" type="checkbox" role="switch" id="leavesSwitch" name="has_leaves"
+                  value="true" />
               </div>
-          
+
               <!-- Plant fruit seeds -->
               <div class="d-flex justify-content-between align-items-center form-check form-switch">
-                  <label class="form-check-label" for="fruitSeeds">Does the plant have fruits or seeds?</label>
-                  <input class="form-check-input mx-5" type="checkbox" role="switch" id="fruitSeeds"
-                      name="has_fruitsorseeds" value="true" />
+                <label class="form-check-label" for="fruitSeeds">Does the plant have fruits or seeds?</label>
+                <input class="form-check-input mx-5" type="checkbox" role="switch" id="fruitSeeds"
+                  name="has_fruitsorseeds" value="true" />
               </div>
-          
+
               <!-- Color of flowers -->
               <div class="d-flex justify-content-between align-items-center form-check my-1">
-                  <label class="form-check-label mx-3" for="flowerColor">Color of Flower</label>
-                  <input class="form-control mx-5" type="text" role="switch" id="flowerColor" style="width: 150px"
-                      placeholder="Enter flower color" name="flower_color" />
+                <label class="form-check-label mx-3" for="flowerColor">Color of Flower</label>
+                <input class="form-control mx-5" type="text" role="switch" id="flowerColor" style="width: 150px"
+                  placeholder="Enter flower color" name="flower_color" />
               </div>
-          
+
               <!-- Lat / Long -->
               <input type="hidden" id="latitudeInput" name="latitude" />
               <input type="hidden" id="longitudeInput" name="longitude" />
-          
+
               <!-- Post button -->
               <button type="submit" class="btn btn-primary my-3 custom-button" style="width: 100%" id="postButton"
-                  name="submit">
-                  Post!
+                name="submit">
+                Post!
               </button>
-          </form>
+            </form>
 
             <script>
               const switches = document.querySelectorAll(
@@ -151,7 +151,7 @@
                     document.getElementById("longitudeInput").value =
                       position.coords.longitude;
                     alert("Location retrieved successfully.");
-                    document.getElementById("plantForm").submit(); // Automatically submit the form
+                    // document.getElementById("plantForm").submit(); // Automatically submit the form
                   } catch (error) {
                     console.error("Error retrieving location:", error);
                   }
@@ -207,91 +207,10 @@
     </div>
     <!-- End of login modal -->
 
-    <div class="d-flex flex-column justify-content-center align-items-center">
-      <!--    Main content-->
-      <!-- <div class="d-flex flex-column justify-content-center align-items-center">
-        <h1>Content Loading</h1>
-        <div class="spinner-border" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div> -->
+    <div class="container mt-4">
+      <div id="plant_list" class="d-flex flex-column justify-content-center align-items-center">
 
-      <!-- Cards -->
-      <% if (plants && plants.length> 0) { %>
-        <% plants.reverse().forEach(plant=> { %>
-          <div class="card my-1" style="width: 60%">
-            <div class="card-header">
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
-                    class="bi bi-person-circle" viewBox="0 0 16 16">
-                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                    <path fill-rule="evenodd"
-                      d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
-                  </svg>
-                  <p class="m-0 mx-2">
-                    <%= plant.createdby %>
-                  </p>
-                </div>
-                <div class="d-flex align-items-center">
-                  <p class="m-0">Status: Incomplete</p>
-                  <a href="/plantdetails?plantid=<%= plant.plantid %>">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                      class="bi bi-chevron-right mx-2" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd"
-                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <!-- Plant image -->
-            <% if (plant.image) { %>
-              <img src="<%= plant.image %>" class="card-img-top align-items-center" alt="Plant image"
-                style="width: auto; height: auto; max-height: 100vh" />
-              <% } else { %>
-                <img src="placeholder-image.jpg" class="card-img-top align-items-center" alt="No image available"
-                  style="width: auto; height: auto; max-height: 100vh" />
-                <% } %>
-                  <div class="card-body">
-                    <!-- Plant name -->
-                    <h5 class="card-title"><a href="/plantdetails?plantid=<%= plant.plantid %>">
-                        <%= plant.name %>
-                      </a></h5>
-                    <!-- Plant description -->
-                    <p class="card-text">
-                      <%= plant.description %>
-                    </p>
-                  </div>
-                  <div class="card-footer text-body-secondary">
-                    <!-- Dummy links for likes and comments -->
-                    <div class="d-flex justify-content-between align-items-center">
-                      <!-- Likes and comments are static for display purposes -->
-                      <div class="d-flex align-items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 122.88 107.39">
-                          <path class="cls-1"
-                            d="M60.83,17.18c8-8.35,13.62-15.57,26-17C110-2.46,131.27,21.26,119.57,44.61c-3.33,6.65-10.11,14.56-17.61,22.32-8.23,8.52-17.34,16.87-23.72,23.2l-17.4,17.26L46.46,93.55C29.16,76.89,1,55.92,0,29.94-.63,11.74,13.73.08,30.25.29c14.76.2,21,7.54,30.58,16.89Z" />
-                        </svg>
-                        <p class="m-0 mx-1">25 Likes</p>
-                      </div>
-                      <div class="d-flex align-items-center">
-                        <p class="m-0">Suggest</p>
-                      </div>
-                    </div>
-                  </div>
-          </div>
-          <% }); %>
-            <% } else { %>
-              <div style="display: grid; place-items: center; height: 100vh; margin: 0; padding: 0;">
-                <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin: 0; padding: 0;">
-                    <img src="images/Drought.svg" alt="Drought Images" style="width: 35vw; height: auto; max-width: 100%; margin: 0; padding: 0;">
-                    <h1 style="font-family: 'Growing Garden', sans-serif; font-size: 5em; margin: 0; padding: 0;">No plants found!</h1>
-                    <h3 style="font-family: 'Growing Garden', sans-serif; font-size: 3em; margin: 0; padding: 0;">Go find some plants!</h3>
-                </div>
-            </div>
-            
-            
-              <% } %>
+      </div>
     </div>
 
     <!-- Footer -->
@@ -306,18 +225,9 @@
     </footer> -->
 
 </body>
-<!-- <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register('/sw.js').then(function (registration) {
-        // Registration was successful
-        console.log('Service Worker registration successful with scope: ', registration.scope);
-      }, function (err) {
-        // registration failed :(
-        console.log('Service Worker registration failed: ', err);
-      });
-    });
-  }
-</script> -->
+
+<script src="/util/idb-utility.js"></script>
+<script src="/util/index.js"></script>
+<script src="/util/insert.js"></script>
 
 </html>
