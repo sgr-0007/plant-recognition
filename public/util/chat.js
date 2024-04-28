@@ -3,6 +3,8 @@ let roomNo = null;
 let socket = io();
 let plantid = "";
 
+//TODO : get the name from session
+
 function init() {   
     const urlParams = new URLSearchParams(window.location.search);
      plantid = urlParams.get('plantid');
