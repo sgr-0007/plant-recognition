@@ -50,6 +50,7 @@ router.get('/', async (req, res) => {
 });
 
 
+
 /* GET home page. */
 router.get('/api/plants', async (req, res) => {
   try {
