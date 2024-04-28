@@ -76,10 +76,9 @@ const insertPlantsInList = (plants) => {
         const plantName = document.createElement("h5");
         plantName.className = "card-title";
         const plantNameLink = document.createElement("a");
-        plantNameLink.href = `/plantdetails?plantid=${plant.plantid}`;
+        plantNameLink.href = `/plantdetails/plantdetails?plantid=${plant.plantid}`;
         plantNameLink.textContent = plant.name;
         plantName.appendChild(plantNameLink);
-
         const plantDesc = document.createElement("p");
         plantDesc.className = "card-text";
         plantDesc.textContent = plant.description;
@@ -131,6 +130,7 @@ window.onload = function () {
 
     // Fetch plant data from the server when online
     if (navigator.onLine) {
+        console.log("Online mode");
         fetch('http://localhost:3000/api/plants')
             .then(function (res) {
                 return res.json();
