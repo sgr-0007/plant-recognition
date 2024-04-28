@@ -144,6 +144,7 @@
                     </button>
 
                     <button
+                            id = "loginButton"
                             type="button"
                             class="btn btn-primary rounded-pill d-flex justify-content-center align-items-center"
                             style="width: 120px; height: 35px"
@@ -152,10 +153,48 @@
                     >
                         Login
                     </button>
+                    <button type="button" id="logoutButton" class="btn btn-secondary" onclick="logout()" style="display: none;">
+                        Logout
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </nav>
 </body>
+<script>
+    // window.onload = function() {
+    //     var storedUsername = localStorage.getItem("username");
+    //
+    //     if (storedUsername) {
+    //         document.getElementById("loginButton").style.display = 'none'; // Hide login button
+    //         document.getElementById("logoutButton").style.display = 'block'; // Show logout button
+    //         alert("Welcome back, " + storedUsername + "!");
+    //     } else {
+    //         document.getElementById("loginButton").style.display = 'block'; // Show login button
+    //         document.getElementById("logoutButton").style.display = 'none'; // Hide logout button
+    //     }
+    //
+    // };
+
+    function logout() {
+        localStorage.removeItem("username");
+        alert("Logged out successfully.");
+        document.getElementById("loginButton").style.display = 'block'; // Show login button
+        document.getElementById("logoutButton").style.display = 'none'; // Hide logout button
+    }
+
+    // Check if user is already logged in on page load
+    document.addEventListener("DOMContentLoaded", function() {
+        var storedUsername = localStorage.getItem("username");
+        if (storedUsername) {
+            document.getElementById("loginButton").style.display = 'none'; // Hide login button
+            document.getElementById("logoutButton").style.display = 'block'; // Show logout button
+            alert("Welcome back, " + storedUsername + "!");
+        } else {
+            document.getElementById("loginButton").style.display = 'block'; // Show login button
+            document.getElementById("logoutButton").style.display = 'none'; // Hide logout button
+        }
+    });
+</script>
 </html>

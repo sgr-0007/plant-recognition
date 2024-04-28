@@ -3,6 +3,11 @@ var router = express.Router();
 const plantsController = require('../controllers/plantController');
 const multer = require('multer');
 const fs = require('fs');
+
+// const { fetchPlantDetails } = require('../public/util/dbpedia');
+
+
+
 // const upload = multe;
 
 var storage = multer.diskStorage({
@@ -48,6 +53,62 @@ router.get('/', async (req, res) => {
     res.render('error', { message: 'Failed to fetch plant data' });
   }
 });
+
+// Assuming Express is already set up and running
+
+// Dynamic plant details route
+router.get('/api/plants/dbsearch', async (req, res) => {
+  // Retrieve plant name from query string
+  const plantName = req.query.name;
+  if (!plantName) {
+    return res.status(400).send('Plant name is required');
+  }
+
+  // The DBpedia SPARQL endpoint URL
+  const endpointUrl = 'https://dbpedia.org/sparql';
+
+  // The SPARQL query to retrieve data for the given plant
+  const sparqlQuery = `
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX dbo: <http://dbpedia.org/ontology/>
+    
+    SELECT ?label ?description
+    WHERE {
+      <http://dbpedia.org/resource/${encodeURIComponent(plantName)}> rdfs:label ?label .
+      <http://dbpedia.org/resource/${encodeURIComponent(plantName)}> dbo:abstract ?description .
+      FILTER (langMatches(lang(?label), "en") && langMatches(lang(?description), "en"))
+    } LIMIT 1`;
+
+  // Encode the query as a URL parameter
+  const encodedQuery = encodeURIComponent(sparqlQuery);
+
+  // Build the URL for the SPARQL query
+  const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
+
+  try {
+    // Use fetch to retrieve the data
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // The results are in the 'data' object
+    if (data.results.bindings.length > 0) {
+      const bindings = data.results.bindings[0];
+      res.render('index', {  // assuming you have a view called 'plant.ejs'
+        label: bindings.label.value,
+        description: bindings.description.value
+      });
+    } else {
+      res.render('index', {  // handling no results found
+        label: 'No data found',
+        description: 'No description available'
+      });
+    }
+  } catch (error) {
+    console.error('Error fetching plant data from DBpedia', error);
+    res.status(500).send('Failed to fetch data');
+  }
+});
+
 
 
 /* GET home page. */
