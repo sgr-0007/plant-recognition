@@ -2,6 +2,10 @@ body {
   background-color: #0e0e10;
 }
 
+.card {
+  padding: 30px;
+}
+
 .custom-navbar-color {
   background-color: #0e0e10; /* Your custom color */
 }
@@ -27,6 +31,17 @@ body {
 
 .custom-ul-text-white li.nav-item a.nav-link {
   color: white; /* Set text color to white */
+}
+
+
+.boxed {
+  width: 100%;
+  padding:10px;
+}
+.bottom {
+  position: absolute;
+  bottom: 10px;
+  width: 90%;
 }
 
 /* For larger screens, hide the footer by default */

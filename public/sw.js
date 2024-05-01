@@ -70,6 +70,8 @@ self.addEventListener('sync', event => {
                         
                         for (const key in plant) {
                             formData.append(key, plant[key]);
+                            console.log("key: ",key)
+                            console.log("plant[key]: ",plant[key])
                         }
                         return fetch('http://localhost:3000/api/plantCreate', {
                             method: 'POST',
