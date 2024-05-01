@@ -33,14 +33,14 @@
             </h1>
           </div>
           <div class="modal-body">
-            <form id="plantForm" enctype="multipart/form-data" method="POST" action="/api/plantCreate">
+            <form id="plantForm" enctype="multipart/form-data" method="POST" action="/api/plantCreate" onsubmit="return validateForm()">
               <!-- Name of the plant -->
-              <label for="nameOfPlant" class="form-label">Name of the plant</label>
+              <label for="nameOfPlant" class="form-label">Name of the plant <span style="color: red">*</span></label>
               <input type="text" class="form-control" id="nameOfPlant" name="name"
-                placeholder="Please enter the name of the plant" />
+                placeholder="Please enter the name of the plant" required />
 
               <!-- Upload Image -->
-              <label for="uploadImage" class="form-label my-2">Upload image</label>
+              <label for="uploadImage" class="form-label my-2">Upload image <span style="color: red">*</span></label>
               <script>
                 function displayFileName() {
                   const fileInput = document.getElementById("fileInput");
@@ -54,35 +54,35 @@
                 <label for="fileInput" class="btn btn-primary">
                   Select from disk
                   <input type="file" id="fileInput" name="image" class="d-none"
-                    accept="image/jpeg, image/png, image/gif" onchange="displayFileName()" />
+                    accept="image/jpeg, image/png, image/gif" onchange="displayFileName()"/>
                 </label>
                 <span id="fileNameDisplay"></span>
               </div>
 
               <!-- User nickname -->
-              <label for="userNickname" class="form-label my-2">User nickname</label>
+              <label for="userNickname" class="form-label my-2">User nickname <span style="color: red">*</span></label>
               <input type="text" class="form-control" id="userNickname" name="createdby"
-                placeholder="Please enter your nickname" />
+                placeholder="Please enter your nickname" required />
 
               <!-- Date and time of plant seen -->
-              <label for="dateAndTime" class="form-label my-2">Date and time plant was seen</label>
-              <input type="datetime-local" id="dateTimePickerInput" class="form-control" name="date_time_plant_seen" />
+              <label for="dateAndTime" class="form-label my-2">Date and time plant was seen <span style="color: red">*</span></label>
+              <input type="datetime-local" id="dateTimePickerInput" class="form-control" name="date_time_plant_seen" required />
 
               <!-- Plant description -->
-              <label for="plantDescription" class="form-label my-2">Plant description</label>
+              <label for="plantDescription" class="form-label my-2">Plant description <span style="color: red">*</span></label>
               <input type="text" class="form-control" id="plantDescription" name="description"
-                placeholder="Enter plant description" />
+                placeholder="Enter plant description" required />
 
               <!-- Plant size -->
               <!-- Plant Height -->
-              <label for="plantHeight" class="form-label my-2">Plant Height</label>
+              <label for="plantHeight" class="form-label my-2">Plant Height <span style="color: red">*</span></label>
               <input type="number" class="form-control" id="plantHeight"
-                placeholder="Enter estimated plant height in meters" name="height" />
+                placeholder="Enter estimated plant height in meters" name="height" required />
 
               <!-- Plant spread -->
-              <label for="plantSpread" class="form-label my-2">Plant Spread</label>
+              <label for="plantSpread" class="form-label my-2">Plant Spread <span style="color: red">*</span></label>
               <input type="number" class="form-control" id="plantSpread"
-                placeholder="Enter estimated plant spread in meters" name="spread" />
+                placeholder="Enter estimated plant spread in meters" name="spread" required />
 
               <!-- Characteristics -->
               <label for="Characteristics" class="form-label my-2">Characteristics</label>
@@ -124,6 +124,18 @@
                 Post!
               </button>
             </form>
+
+            <script>
+              function validateForm() {
+                console.log("INSIDE THE VALIDATE FORM");
+                const fileInput = document.getElementById("fileInput").files[0];
+                if(!fileInput){
+                  alert("Please upload the plant image!");
+                  return false;
+                }
+                return true;
+              }
+            </script>
 
             <script>
               const switches = document.querySelectorAll(
