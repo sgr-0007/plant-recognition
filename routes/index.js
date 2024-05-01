@@ -76,8 +76,8 @@ router.get('/api/plant', async (req, res) => {
 // POST route for creating a new plant
 router.post('/api/plantCreate', upload.single('image'), async (req, res) => {
   try {
-    console.log(req.body);  // Log text data
-    console.log(req.file);  // Log file data
+    // console.log(req.body);  // Log text data
+    // console.log(req.file);  // Log file data
     await plantsController.createPlant(req, res);
   } catch (err) {
     console.error('Error while creating plant:', err);
