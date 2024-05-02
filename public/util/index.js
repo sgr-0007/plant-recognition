@@ -90,6 +90,11 @@ const insertPlantsInList = (plants) => {
       // Append the SVG to the DOM or use it as needed
       document.body.appendChild(creatorIcon);
 
+      //hasflowers = plants.hasFLowers = true/false
+      // const hasflowers = document.createElement("p");
+      // creatorName.className = "m-0 mx-2";
+      // creatorName.textContent = plant.hasflowers;
+
       const creatorName = document.createElement("p");
       creatorName.className = "m-0 mx-2";
       creatorName.textContent = plant.createdby;
@@ -131,7 +136,28 @@ const insertPlantsInList = (plants) => {
       const img = document.createElement("img");
       img.className = "card-img-top";
       img.alt = "Plant image";
-      img.src = plant.image ? plant.image : "placeholder-image.jpg";
+      // img.src = plant.image ? plant.image : "placeholder-image.jpg";
+      // card.appendChild(img);
+
+      // const img = document.createElement("img");
+      // img.className = "card-img-top";
+      // img.alt = "Plant image";
+      // img.src = plant.image; // Directly use the data URL stored in IndexedDB
+
+      // Assume `plant.image` is retrieved as a Blob from IndexedDB
+      if (plant.image instanceof Blob) {
+        console.log('plant image is Blob')
+        img.src = URL.createObjectURL(plant.image);
+        img.onload = () => {
+          URL.revokeObjectURL(img.src); // Clean up the blob URL after loading
+        };
+      } else {
+        console.log('plant image not Blob')
+        // If not a Blob, handle as a normal URL or a data URL
+        img.src = plant.image;
+      }
+
+
       card.appendChild(img);
 
       // Card body with plant name and description
@@ -275,6 +301,7 @@ window.onload = function () {
   // Fetch plant data from the server when online
   if (navigator.onLine) {
     console.log("Online mode");
+
     fetch("http://localhost:3000/api/plants")
       .then(function (res) {
         return res.json();
@@ -282,6 +309,11 @@ window.onload = function () {
       .then(function (newPlants) {
         console.log(newPlants);
         console.log(typeof newPlants);
+        navigator.serviceWorker.ready.then(registration => {
+          return registration.sync.register('sync-plant-data');
+        }).catch(err => {
+          console.error('Error registering sync:', err);
+        });
         openPlantsIDB().then((db) => {
           insertPlantsInList(newPlants, db);
           deleteAllExistingPlantsFromIDB(db).then(() => {
@@ -292,13 +324,28 @@ window.onload = function () {
         });
       });
   } else {
+    navigator.serviceWorker.ready.then(registration => {
+      return registration.sync.register('sync-plant-data');
+    }).catch(err => {
+      console.error('Error registering sync:', err);
+    });
+
     // Handle offline scenario by loading plants from IndexedDB
     console.log("Offline mode");
     openPlantsIDB().then((db) => {
-      getAllPlants(db).then((plants) => {
-        for (const plant of plants) {
-          insertPlantsInList(plant);
-        }
+      getAllPlantsOffline(db).then((plants) => {
+        // for (const plant of plants) {
+        insertPlantsInList(plants);
+        // }
+      });
+    });
+
+    console.log("Add plants from SYNC IDB");
+    openSyncPlantsIDB().then((db) => {
+      getAllSyncPlantsOffline(db).then((plants) => {
+        // for (const plant of plants) {
+        insertPlantsInList(plants);
+        // }
       });
     });
   }

@@ -64,9 +64,6 @@
           <div class="modal-body">
             <form
               id="plantForm"
-              enctype="multipart/form-data"
-              method="POST"
-              action="/api/plantCreate"
               onsubmit="return validateForm()"
             >
               <!-- Name of the plant -->
@@ -441,8 +438,9 @@
       }
     </script>
     <!-- End of suggest modal -->
-
+    
     <div class="container mt-4">
+      <!-- <button onclick="manualSync()">Sync Now</button> -->
       <div
         id="plant_list"
         class="d-flex flex-column justify-content-center align-items-center"
@@ -460,7 +458,13 @@
       </ul>
     </footer> -->
   </body>
-
+  <!-- <script>
+    function manualSync() {
+        navigator.serviceWorker.ready.then(registration => {
+            registration.sync.register('sync-plant-data');
+        });
+    }
+    </script> -->
   <script src="/util/idb-utility.js"></script>
   <script src="/util/index.js"></script>
   <script src="/util/insert.js"></script>

@@ -95,12 +95,28 @@ const deleteAllExistingPlantsFromIDB = (plantDB) => {
 };
 
 // Function to retrieve all plants from IndexedDB
+const getAllPlantsOffline = (plantDB) => {
+    return new Promise((resolve, reject) => {
+        const transaction = plantDB.transaction(["plants"], "readonly");
+        const plantStore = transaction.objectStore("plants");
+        const getRequest = plantStore.getAll();
+        getRequest.onsuccess = () => {
+            // resolve(getRequest.result);
+            resolve({ plants: getRequest.result });
+        };
+        getRequest.onerror = (event) => {
+            reject(event.target.error);
+        };
+    });
+};
+
 const getAllPlants = (plantDB) => {
     return new Promise((resolve, reject) => {
         const transaction = plantDB.transaction(["plants"], "readonly");
         const plantStore = transaction.objectStore("plants");
         const getRequest = plantStore.getAll();
         getRequest.onsuccess = () => {
+            // resolve(getRequest.result);
             resolve(getRequest.result);
         };
         getRequest.onerror = (event) => {
@@ -109,7 +125,6 @@ const getAllPlants = (plantDB) => {
     });
 };
 
-// Function to get the list of all sync plants from the IndexedDB
 const getAllSyncPlants = (syncPlantIDB) => {
     return new Promise((resolve, reject) => {
         // Open a transaction on the 'sync-plants' object store in readonly mode
@@ -121,7 +136,30 @@ const getAllSyncPlants = (syncPlantIDB) => {
 
         // Add event listeners to handle the request completion
         getAllRequest.onsuccess = () => {
-            resolve(getAllRequest.result); // Resolve the promise with the result when successful
+            // resolve(getAllRequest.result); // Resolve the promise with the result when successful
+            resolve(getAllRequest.result);
+        };
+
+        getAllRequest.onerror = (event) => {
+            reject(event.target.error); // Reject the promise if an error occurs
+        };
+    });
+}
+
+// Function to get the list of all sync plants from the IndexedDB
+const getAllSyncPlantsOffline = (syncPlantIDB) => {
+    return new Promise((resolve, reject) => {
+        // Open a transaction on the 'sync-plants' object store in readonly mode
+        const transaction = syncPlantIDB.transaction(["sync-plants"], "readonly");
+        const plantStore = transaction.objectStore("sync-plants");
+
+        // Create a request to get all entries from the store
+        const getAllRequest = plantStore.getAll();
+
+        // Add event listeners to handle the request completion
+        getAllRequest.onsuccess = () => {
+            // resolve(getAllRequest.result); // Resolve the promise with the result when successful
+            resolve({ plants: getAllRequest.result });
         };
 
         getAllRequest.onerror = (event) => {
@@ -171,6 +209,9 @@ function openPlantsIDB() {
         };
     });
 }
+
+
+
 
 function openSyncPlantsIDB() {
     return new Promise((resolve, reject) => {

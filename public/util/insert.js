@@ -43,6 +43,15 @@ if ("undefined" === typeof window) {
   importScripts("./util/idb-utility.js");
 }
 
+const readFileAsDataUrl = (file) => {
+  return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(reader.error);
+      reader.readAsDataURL(file);
+  });
+};
+
 document.addEventListener("DOMContentLoaded", function () {
   const plantForm = document.getElementById("plantForm");
 
@@ -79,6 +88,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Open IndexedDB and add new plant to sync
     openSyncPlantsIDB().then((db) => {
+      // Assuming plantData contains a file object under 'image'
+      if (plantData.image) {
+        readFileAsDataUrl(plantData.image).then(dataUrl => {
+          plantData.image = dataUrl;  // Store image as data URL
+          // Now add the plant data to IndexedDB including the image
+          // addNewPlantToSync(syncPlantIDB, plantData);
+        }).catch(error => {
+          console.error("Error processing file:", error);
+        });
+      }
       addNewPlantToSync(db, plantData)
         .then(() => {
           // Close the modal
