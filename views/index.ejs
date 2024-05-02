@@ -113,13 +113,13 @@
                 >User nickname <span style="color: red">*</span></label
               >
               <input
-                type="text"
-                class="form-control"
-                id="userNickname"
-                name="createdby"
-                placeholder="Please enter your nickname"
-                required
-              />
+                      type="text"
+                      class="form-control"
+                      id="userNickname"
+                      name="createdby"
+                      placeholder="Please enter your nickname"
+                      required
+              >
 
               <!-- Date and time of plant seen -->
               <label for="dateAndTime" class="form-label my-2"
@@ -263,6 +263,16 @@
                 Post!
               </button>
             </form>
+
+            <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                var storedUsername = localStorage.getItem('username');
+                if (storedUsername) {
+                  document.getElementById('userNickname').value = storedUsername;
+                  document.getElementById('userNickname').place = storedUsername;
+                }
+              });
+            </script>
 
             <script>
               function validateForm() {
@@ -468,6 +478,7 @@
       alert("Logged in successfully as " + username);
       document.getElementById("loginButton").style.display = 'none'; // Hide login button
       document.getElementById("logoutButton").style.display = 'block'; // Show logout button
+      location.reload()
     } else {
       alert("Please enter a username.");
     }
