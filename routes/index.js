@@ -3,6 +3,7 @@ var router = express.Router();
 const plantsController = require('../controllers/plantController');
 const multer = require('multer');
 const fs = require('fs');
+const {getSortedPlants} = require("../controllers/plantController");
 
 // const { fetchPlantDetails } = require('../public/util/dbpedia');
 
@@ -61,7 +62,7 @@ router.get('/api/plants/dbsearch', async (req, res) => {
   // Retrieve plant name from query string
   const plantName = req.query.name;
   if (!plantName) {
-    return res.status(400).send('Plant name is required');
+    return res.status(400).json({ error: 'Plant name is required' });
   }
 
   // The DBpedia SPARQL endpoint URL
@@ -70,6 +71,7 @@ router.get('/api/plants/dbsearch', async (req, res) => {
   // The SPARQL query to retrieve data for the given plant
   const sparqlQuery = `
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX dbo: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     
     SELECT ?label ?description
@@ -93,24 +95,21 @@ router.get('/api/plants/dbsearch', async (req, res) => {
     // The results are in the 'data' object
     if (data.results.bindings.length > 0) {
       const bindings = data.results.bindings[0];
-      res.render('index', {  // assuming you have a view called 'plant.ejs'
+      res.json({
         label: bindings.label.value,
         description: bindings.description.value
       });
     } else {
-      res.render('index', {  // handling no results found
+      res.status(404).json({
         label: 'No data found',
         description: 'No description available'
       });
     }
   } catch (error) {
     console.error('Error fetching plant data from DBpedia', error);
-    res.status(500).send('Failed to fetch data');
+    res.status(500).json({ error: 'Failed to fetch data' });
   }
 });
-
-
-
 
 /* GET home page. */
 router.get('/api/plants', async (req, res) => {
@@ -122,6 +121,9 @@ router.get('/api/plants', async (req, res) => {
     res.render('error', { message: 'Failed to fetch plant data' });
   }
 });
+
+router.get('/api/plants/sorted', getSortedPlants);
+
 
 router.get('/api/plant', async (req, res) => {
   const plantid = req.query.plantid;
