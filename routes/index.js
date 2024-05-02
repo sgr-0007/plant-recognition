@@ -3,6 +3,7 @@ var router = express.Router();
 const plantsController = require('../controllers/plantController');
 const multer = require('multer');
 const fs = require('fs');
+const {getSortedPlants} = require("../controllers/plantController");
 
 // const { fetchPlantDetails } = require('../public/util/dbpedia');
 
@@ -120,6 +121,9 @@ router.get('/api/plants', async (req, res) => {
     res.render('error', { message: 'Failed to fetch plant data' });
   }
 });
+
+router.get('/api/plants/sorted', getSortedPlants);
+
 
 router.get('/api/plant', async (req, res) => {
   const plantid = req.query.plantid;

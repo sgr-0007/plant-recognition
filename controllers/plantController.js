@@ -77,6 +77,34 @@ exports.getAllPlants = async (req, res) => {
   }
 };
 
+// File: controllers/plantController.js
+
+exports.getSortedPlants = async (req, res) => {
+  const { sort, order = 'desc', has_flowers, has_leaves, has_fruitsorseeds } = req.query;
+  let query = {};
+
+  if (has_flowers) query.has_flowers = has_flowers === 'true';
+  if (has_leaves) query.has_leaves = has_leaves === 'true';
+  if (has_fruitsorseeds) query.has_fruitsorseeds = has_fruitsorseeds === 'true';
+
+  try {
+    // Construct a sort object dynamically based on the query params
+    let sortOptions = {};
+    if (sort) {
+      sortOptions[sort] = order === 'desc' ? -1 : 1;
+    } else {
+      sortOptions['createddate'] = -1; // Default sorting
+    }
+
+    let plants = await Plant.find(query).sort(sortOptions);
+    res.json({ success: true, data: plants });
+  } catch (error) {
+    console.error('Error fetching sorted plants:', error);
+    res.status(500).json({ success: false, message: "Failed to fetch sorted plants", error: error.message });
+  }
+};
+
+
 exports.getPlantById = async (req, res) => {
   const { plantid } = req.params;
   try {
