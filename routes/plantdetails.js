@@ -12,4 +12,23 @@ router.get('/:plantid', async (req, res) => {
       }
   });
 
+  router.post('/:plantid/comments', async (req, res) => {
+    try {
+      await plantsController.addComment(req, res);
+    } catch (err) {
+      console.error('Error while commenting:', err);
+      res.status(500).render('error', { message: 'Failed to add your comment' });
+    }
+  });
+
+  router.get('/:plantid/comments', async (req, res) => {
+    try {
+
+      await plantsController.getComments(req, res);
+    } catch (err) {
+      console.error('Error while commenting:', err);
+      res.status(500).render('error', { message: 'Failed to add your comment' });
+    }
+  });
+
   module.exports = router;
