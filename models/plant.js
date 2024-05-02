@@ -32,7 +32,7 @@ const plantSchema = new mongoose.Schema({
         plantidentificationid: { type: Number },
         suggestedname: { type: String },
         identifiedby: { type: String },
-        status: { type: String },
+        status: { type: String, default: "Not Approved" },
         approved: { type: Boolean, default: false }
     }]
 });

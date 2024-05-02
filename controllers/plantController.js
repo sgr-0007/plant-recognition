@@ -108,8 +108,6 @@ exports.postPlantIdentification = async (req, res) => {
       plantidentificationid: generateRandomID(),
       suggestedname,
       identifiedby,
-      status: "Not Approved",
-      approved: false
     };
 
     plant.identifications.push(newIdentification);
