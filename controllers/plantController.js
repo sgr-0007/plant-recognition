@@ -121,3 +121,55 @@ exports.postPlantIdentification = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 }
+
+exports.addComment = async (req, res) => {
+  const { plantid } = req.params;
+  const { comment, commentedby } = req.body;
+
+  // Error handling for missing data
+  if (!plantid || !comment || !commentedby) {
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
+
+  try {
+    // Find the plant by ID
+    const plant = await Plant.findOne({ plantid });
+
+    if (!plant) {
+      return res.status(404).json({ message: 'Plant not found' });
+    }
+
+    // Create a new comment object
+    const newComment = {
+      commentid: Math.floor(Math.random() * 100000) + 1, 
+      commentedby: commentedby,
+      comment,
+    };
+
+    // Add the new comment to the plant's comments array
+    plant.comments.push(newComment);
+
+    // Save the updated plant document
+    const updatedPlant = await plant.save();
+
+    return res.status(201).json({ message: 'Comment added successfully', comment: newComment });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+exports.getComments = async (req, res) => {
+  const { plantid } = req.params;
+
+  try {
+    const plant = await Plant.findOne({ plantid });
+    // fetch comments
+    const comments = plant.comments;
+    res.json({ comments });
+  }
+  catch (error) {
+    console.error('Error fetching comments:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}

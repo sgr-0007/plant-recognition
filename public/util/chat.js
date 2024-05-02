@@ -27,6 +27,7 @@ function init() {
         writeOnHistory('<b>' + who + ':</b> ' + chatText);
     });
 
+    getChat();
 }
 
 /**
@@ -36,7 +37,55 @@ function init() {
 function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
     socket.emit('chat', roomNo, name, chatText);
+    //call the API to save the chat
+    saveChat();
 }
+
+function saveChat() {
+    let chatText = document.getElementById('chat_input').value;
+    let chat = {
+        comment: chatText,
+        commentedby: name
+    }
+    console.log('Chat:', chat);
+    fetch(`http://localhost:3000/api/plantdetails/${plantid}/comments`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(chat),
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('ChatSuccess:', data);
+        })
+        .catch((error) => {
+            console.error('ChatError:', error);
+        });
+}
+
+function getChat() {
+    fetch(`http://localhost:3000/api/plantdetails/${plantid}/comments`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('getChatSuccess:', data);
+            data.comments.forEach(comment => {
+                let who = comment.commentedby
+                if (comment.commentedby === name) who = 'Me';
+                writeOnHistory('<b>' + who + ':</b> ' + comment.comment);
+            });
+        })
+        .catch((error) => {
+            console.error('getChatError:', error);
+        });
+}
+
+
 
 function connectToRoom() {
     name = "sagar";
