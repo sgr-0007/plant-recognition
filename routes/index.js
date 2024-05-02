@@ -85,4 +85,15 @@ router.post('/api/plantCreate', upload.single('image'), async (req, res) => {
   }
 });
 
+// POST route for adding plant identification to the plantid
+router.post('/api/:plantid/plantIdentification', async(req, res)=>{
+  try {
+    const plantIdentification = await plantsController.postPlantIdentification(req, res);
+    console.log(plantIdentification);
+  } catch (error) {
+    console.error('Error posting plant identification', err);
+    res.render('error', { message: 'Failed to post plant identification' });
+  }
+});
+
 module.exports = router;

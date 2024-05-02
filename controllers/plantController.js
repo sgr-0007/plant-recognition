@@ -91,3 +91,35 @@ exports.getPlantById = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.postPlantIdentification = async (req, res) => {
+  const { plantid } = req.params;
+  const { suggestedname, identifiedby } = req.body;
+  try {
+    console.log("Plant ID for identification: ", plantid);
+    console.log("Plant identification details: ", suggestedname, ", ",identifiedby);
+    const plant = await Plant.findOne({ plantid });
+
+    if(!plant){
+      return res.status(404).json({ error: 'Plant not found' });
+    }
+
+    const newIdentification = {
+      plantidentificationid: generateRandomID(),
+      suggestedname,
+      identifiedby,
+      status: "Not Approved",
+      approved: false
+    };
+
+    plant.identifications.push(newIdentification);
+    await plant.save();
+
+    console.log("Plant identi added successfully! ", newIdentification);
+    res.status(201).json({ message: 'Plant identification added successfully', identification: newIdentification });
+
+  } catch (error) {
+    console.error('Error adding plant identification:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
