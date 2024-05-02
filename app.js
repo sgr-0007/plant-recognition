@@ -7,6 +7,10 @@ const mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var plantDetailsApiRouter = require('./routes/plantdetails');
+var plantDetailsRouter = require('./fe-routes/plantdetails');
+
+
 
 // MongoDB URL
 const PORT = process.env.PORT || 5000;
@@ -38,7 +42,11 @@ app.use(express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')))
 app.use(express.static('server'));
 
 app.use('/', indexRouter);
+app.use('/plantdetails', plantDetailsRouter);
 app.use('/users', usersRouter);
+app.use('/api/plantdetails', plantDetailsApiRouter);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

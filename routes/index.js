@@ -111,6 +111,7 @@ router.get('/api/plants/dbsearch', async (req, res) => {
 
 
 
+
 /* GET home page. */
 router.get('/api/plants', async (req, res) => {
   try {
@@ -136,12 +137,23 @@ router.get('/api/plant', async (req, res) => {
 // POST route for creating a new plant
 router.post('/api/plantCreate', upload.single('image'), async (req, res) => {
   try {
-    console.log(req.body);  // Log text data
-    console.log(req.file);  // Log file data
+    // console.log(req.body);  // Log text data
+    // console.log(req.file);  // Log file data
     await plantsController.createPlant(req, res);
   } catch (err) {
     console.error('Error while creating plant:', err);
     res.status(500).render('error', { message: 'Failed to create plant' });
+  }
+});
+
+// POST route for adding plant identification to the plantid
+router.post('/api/:plantid/plantIdentification', async(req, res)=>{
+  try {
+    const plantIdentification = await plantsController.postPlantIdentification(req, res);
+    console.log(plantIdentification);
+  } catch (error) {
+    console.error('Error posting plant identification', err);
+    res.render('error', { message: 'Failed to post plant identification' });
   }
 });
 
