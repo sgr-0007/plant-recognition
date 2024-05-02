@@ -64,6 +64,9 @@
           <div class="modal-body">
             <form
               id="plantForm"
+              enctype="multipart/form-data"
+              method="POST"
+              action="/api/plantCreate"
               onsubmit="return validateForm()"
             >
               <!-- Name of the plant -->
@@ -397,14 +400,17 @@
           </div>
           <!-- Modal body -->
           <div class="modal-body">
-            <form id="suggestionForm" method="POST" action="">
+            <form id="suggestionForm" method="POST" enctype="application/x-www-form-urlencoded" action="/api/:plantid/plantIdentification">
+            <!-- PlantID to send to the controller -->
+            <input type="hidden" name="plantid" id="plantIDInput" value="">
             <!-- Username -->
+
             <label for="username" class="form-label">Username</label>
             <input type="text" class="form-control" id="username" placeholder="Please enter your username" />
             <!-- Suggestion -->
             <label for="suggestion" class="form-label">Suggestion</label>
             <input type="text" class="form-control" id="suggestion" placeholder="Please enter your suggestion for this plant" />
-            <button type="button" class="btn btn-primary my-3" style="width: 100%; background-color: #22338f">
+            <button type="submit" class="btn btn-primary my-3" style="width: 100%; background-color: #22338f">
               Suggest!
             </button>
           </form>
@@ -432,15 +438,18 @@
         plantID.textContent = plantId;
         const plantNAME = modal.querySelector('#plantName');
         plantNAME.textContent = plantName;
+        const plantIDinput = modal.querySelector('#plantIDInput');
+        plantIDinput.value = plantId;
       }
       function closeModal(modal) {
         modal.style.display = "none";
       }
     </script>
     <!-- End of suggest modal -->
-    
-    <div class="container mt-4">
-      <!-- <button onclick="manualSync()">Sync Now</button> -->
+
+    <div class="mt-4 w-60">
+            <!-- <button onclick="manualSync()">Sync Now</button> -->
+
       <div
         id="plant_list"
         class="d-flex flex-column justify-content-center align-items-center"

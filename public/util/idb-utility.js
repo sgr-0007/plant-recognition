@@ -146,6 +146,23 @@ const getAllSyncPlants = (syncPlantIDB) => {
     });
 }
 
+// Get plant by plantid
+const getPlantById = (plantDB, plantid) => {
+    return new Promise((resolve, reject) => {
+        const transaction = plantDB.transaction(["plants"], "readonly");
+        const plantStore = transaction.objectStore("plants");
+        const getRequest = plantStore.get(plantid);
+        getRequest.onsuccess = () => {
+            resolve(getRequest.result);
+        };
+        getRequest.onerror = (event) => {
+            reject(event.target.error);
+        };
+    });
+};
+
+
+
 // Function to get the list of all sync plants from the IndexedDB
 const getAllSyncPlantsOffline = (syncPlantIDB) => {
     return new Promise((resolve, reject) => {
