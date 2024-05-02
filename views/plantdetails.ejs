@@ -55,6 +55,25 @@
                                 </div>
 
 
+                                <div class="card">
+                                        <div class="card-header">
+                                                Plant Details from DB Pedia
+                                        </div>
+
+                                        <div class="card-body" style="padding: 20px;">
+                                                <% if (plantDetails.label !== 'No data found') { %>
+                                                        <ul class="list-group">
+                                                                <li class="list-group-item">Name: <%= plantDetailsDB.label %></li>
+                                                                <li class="list-group-item">Description: <%= plantDetailsDB.description %></li>
+                                                        </ul>
+                                                <% } else { %>
+                                                        <div class="alert alert-warning" role="alert">
+                                                                <%= plantDetails.label %>: <%= plantDetails.details %>
+                                                        </div>
+                                                <% } %>
+                                        </div>
+                                </div>
+
                         </div>
                         <div class="col-md-6">
                                 <div class="card">
