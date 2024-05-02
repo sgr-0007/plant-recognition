@@ -125,21 +125,6 @@ const getAllPlants = (plantDB) => {
     });
 };
 
-
-const getPlantById = (plantDB, plantid) => {
-    return new Promise((resolve, reject) => {
-        const transaction = plantDB.transaction(["plants"], "readonly");
-        const plantStore = transaction.objectStore("plants");
-        const getRequest = plantStore.get(plantid);
-        getRequest.onsuccess = () => {
-            resolve(getRequest.result);
-        };
-        getRequest.onerror = (event) => {
-            reject(event.target.error);
-        };
-    });
-};
-
 const getAllSyncPlants = (syncPlantIDB) => {
     return new Promise((resolve, reject) => {
         // Open a transaction on the 'sync-plants' object store in readonly mode
