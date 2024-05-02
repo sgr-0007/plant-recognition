@@ -15,8 +15,8 @@ var plantDetailsRouter = require('./fe-routes/plantdetails');
 // MongoDB URL
 const PORT = process.env.PORT || 5000;
 //please enter your local MONGO creds, It's working for me. 
-// const mongoDB = 'mongodb+srv://faiqiqbal37:plant1234@plant-recognition.abudcv7.mongodb.net/';
-const mongoDB = 'mongodb://localhost:27017/plantDb'
+const mongoDB = 'mongodb+srv://faiqiqbal37:plant1234@plant-recognition.abudcv7.mongodb.net/';
+// const mongoDB = 'mongodb://localhost:27017/plantDb'
 
 // Connect to MongoDB
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })

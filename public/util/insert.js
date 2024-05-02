@@ -116,6 +116,46 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
   });
+
+
+  const plantSuggestion = document.getElementById("suggestionForm");
+
+  plantSuggestion.addEventListener("submit", function (event){
+    event.preventDefault();
+
+    // Gather data from the suggestion form
+    const suggestionData = {
+      plantID: document.getElementById("plantIDInput").value,
+      suggestedName: document.getElementById("suggestion").value,
+      identifiedBy: document.getElementById("username").value,
+      status: "Not Approved",
+      approved: false
+    };
+
+    console.log("Collected suggestion data: ", suggestionData);
+
+    openPlantsIDB().then((db) =>{
+      //get plant row for that plant id
+      //then update the identification of that plant
+      //Save the updated plant to the idb
+      addNewSuggestionToSync(db, suggestionData)
+        .then(() => {
+          navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
+            serviceWorkerRegistration
+            .showNotification("Plant App", {
+              body: `New Suggestion added! - ${suggestionData.suggestedName}`, 
+            })
+            .then((r) => console.log("Notification displayed:", r))
+            .catch((e) => console.error("Notification failed:", e));
+          });
+        })
+        .catch((error) => {
+          console.error("Error adding suggestion to DB: ", error);
+        });
+    });
+
+  });
+
 });
 
 // You need to ensure functions like `openPlantsIDB` and `addNewPlantToSync` are defined and properly handle the data structure.
