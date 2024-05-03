@@ -18,12 +18,14 @@ function sortPlants(sortType) {
       return;
   }
   plantsData.plants = sortedPlants; // Update global plantsData with sorted data
+
   insertPlantsInList(plantsData); // Re-render the plant list
 }
 
 
 const insertPlantsInList = (plants) => {
   const plantList = document.getElementById("plant_list");
+  plantList.innerHTML = '';
 
 
 
