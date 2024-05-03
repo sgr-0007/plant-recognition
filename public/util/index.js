@@ -1,5 +1,33 @@
+let plantsData = { plants: [] }; // Global variable to store plant data
+
+
+function sortPlants(sortType) {
+  let sortedPlants = [...plantsData.plants];
+  switch (sortType) {
+    case 'newest':
+      sortedPlants.sort((a, b) => new Date(b.createddate) - new Date(a.createddate));
+      break;
+    case 'oldest':
+      sortedPlants.sort((a, b) => new Date(a.createddate) - new Date(b.createddate));
+      break;
+    case 'name':
+      sortedPlants.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    default:
+      console.error('Unsupported sort type');
+      return;
+  }
+  plantsData.plants = sortedPlants; // Update global plantsData with sorted data
+
+  insertPlantsInList(plantsData); // Re-render the plant list
+}
+
+
 const insertPlantsInList = (plants) => {
   const plantList = document.getElementById("plant_list");
+  plantList.innerHTML = '';
+
+
 
   if (plants.plants.length === 0) {
     console.log("HELLLLOOOO");
@@ -132,6 +160,14 @@ const insertPlantsInList = (plants) => {
       cardHeader.appendChild(headerContent);
       card.appendChild(cardHeader);
 
+      const date = new Date(plant.createddate);
+
+
+      const createdDateText = document.createElement("p");
+      createdDateText.className = "card-text";
+      createdDateText.textContent = `Created on: ${date.toLocaleDateString()}`;
+
+
       // Plant image
       const img = document.createElement("img");
       img.className = "card-img-top";
@@ -254,6 +290,7 @@ const insertPlantsInList = (plants) => {
       cardBody.appendChild(suggestionSection);
 
       card.appendChild(cardBody);
+      card.appendChild(createdDateText);
 
       // Append the constructed card to the plant list at the beginning
       plantList.prepend(card);
@@ -309,6 +346,7 @@ window.onload = function () {
       .then(function (newPlants) {
         console.log(newPlants);
         console.log(typeof newPlants);
+        plantsData = newPlants;
         navigator.serviceWorker.ready.then(registration => {
           return registration.sync.register('sync-plant-data');
         }).catch(err => {

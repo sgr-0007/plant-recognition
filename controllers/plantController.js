@@ -77,6 +77,77 @@ exports.getAllPlants = async (req, res) => {
   }
 };
 
+exports.searchPlant = async (req, res) => {
+  const plantName = req.query.name;
+  if (!plantName) {
+    res.status(400).json({ error: 'Plant name is required' });
+    return;
+  }
+
+  const endpointUrl = 'https://dbpedia.org/sparql';
+  const sparqlQuery = `
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX dbo: <http://dbpedia.org/ontology/>
+    
+    SELECT ?label ?description
+    WHERE {
+      <http://dbpedia.org/resource/${encodeURIComponent(plantName)}> rdfs:label ?label .
+      <http://dbpedia.org/resource/${encodeURIComponent(plantName)}> dbo:abstract ?description .
+      FILTER (langMatches(lang(?label), "en") && langMatches(lang(?description), "en"))
+    } LIMIT 1`;
+
+  const encodedQuery = encodeURIComponent(sparqlQuery);
+  const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.results.bindings.length > 0) {
+      const bindings = data.results.bindings[0];
+      const plantDetails = {
+        label: bindings.label.value,
+        description: bindings.description.value
+      };
+      res.json(plantDetails);
+    } else {
+      res.status(404).json({ error: 'No data found' });
+    }
+  } catch (error) {
+    console.error('Error fetching plant data from DBpedia', error);
+    res.status(500).json({ error: 'Failed to fetch data' });
+  }
+};
+
+
+// File: controllers/plantController.js
+
+exports.getSortedPlants = async (req, res) => {
+  const { sort, order = 'desc', has_flowers, has_leaves, has_fruitsorseeds } = req.query;
+  let query = {};
+
+  if (has_flowers) query.has_flowers = has_flowers === 'true';
+  if (has_leaves) query.has_leaves = has_leaves === 'true';
+  if (has_fruitsorseeds) query.has_fruitsorseeds = has_fruitsorseeds === 'true';
+
+  try {
+    // Construct a sort object dynamically based on the query params
+    let sortOptions = {};
+    if (sort) {
+      sortOptions[sort] = order === 'desc' ? -1 : 1;
+    } else {
+      sortOptions['createddate'] = -1; // Default sorting
+    }
+
+    let plants = await Plant.find(query).sort(sortOptions);
+    res.json({ success: true, data: plants });
+  } catch (error) {
+    console.error('Error fetching sorted plants:', error);
+    res.status(500).json({ success: false, message: "Failed to fetch sorted plants", error: error.message });
+  }
+};
+
+
 exports.getPlantById = async (req, res) => {
   const { plantid } = req.params;
   try {

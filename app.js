@@ -24,6 +24,8 @@ mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
   .catch(err => console.log(err))
 
 var app = express();
+// const { Client } = require('sparql-http-client');
+
 
 app.use('/node_modules', express.static(__dirname + '/node_modules'));
 

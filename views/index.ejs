@@ -44,6 +44,7 @@
     <!--        Navbar-->
     <%- include('navbar.ejs') %>
 
+
     <!-- New post modal -->
     <div
       class="modal fade"
@@ -115,13 +116,13 @@
                 >User nickname <span style="color: red">*</span></label
               >
               <input
-                type="text"
-                class="form-control"
-                id="userNickname"
-                name="createdby"
-                placeholder="Please enter your nickname"
-                required
-              />
+                      type="text"
+                      class="form-control"
+                      id="userNickname"
+                      name="createdby"
+                      placeholder="Please enter your nickname"
+                      required
+              >
 
               <!-- Date and time of plant seen -->
               <label for="dateAndTime" class="form-label my-2"
@@ -267,6 +268,16 @@
             </form>
 
             <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                var storedUsername = localStorage.getItem('username');
+                if (storedUsername) {
+                  document.getElementById('userNickname').value = storedUsername;
+                  document.getElementById('userNickname').place = storedUsername;
+                }
+              });
+            </script>
+
+            <script>
               function validateForm() {
                 console.log("INSIDE THE VALIDATE FORM");
                 const fileInput = document.getElementById("fileInput").files[0];
@@ -356,18 +367,12 @@
           </div>
           <div class="modal-body">
             <label for="username" class="form-label">Username</label>
-            <input
-              type="email"
-              class="form-control"
-              id="username"
-              placeholder="Please enter your username"
-            />
-            <button
-              type="button"
-              class="btn btn-primary my-3"
-              style="width: 100%; background-color: #22338f"
-            >
+            <input type="email" class="form-control" id="username" placeholder="Please enter your username" />
+            <button id="loginButton" type="button" class="btn btn-primary my-3" onclick="login()" style="width: 100%; background-color: #22338f">
               Log in!
+            </button>
+            <button type="button" id="logoutButton" class="btn btn-secondary" onclick="logout()" style="display: none;">
+              Logout
             </button>
           </div>
           <div class="modal-footer">
@@ -466,15 +471,48 @@
         <li class="nav-item"><a href="#" class="nav-link px-2">About</a></li>
       </ul>
     </footer> -->
-  </body>
-  <!-- <script>
-    function manualSync() {
-        navigator.serviceWorker.ready.then(registration => {
-            registration.sync.register('sync-plant-data');
-        });
+
+
+</body>
+
+<script src="/util/idb-utility.js"></script>
+<script src="/util/index.js"></script>
+<script src="/util/insert.js"></script>
+
+<script>
+  function login() {
+    var username = document.getElementById("username").value;
+    if (username) {
+      localStorage.setItem("username", username);
+      alert("Logged in successfully as " + username);
+      document.getElementById("loginButton").style.display = 'none'; // Hide login button
+      document.getElementById("logoutButton").style.display = 'block'; // Show logout button
+      location.reload()
+    } else {
+      alert("Please enter a username.");
     }
-    </script> -->
-  <script src="/util/idb-utility.js"></script>
-  <script src="/util/index.js"></script>
-  <script src="/util/insert.js"></script>
+  }
+
+  function logout() {
+    localStorage.removeItem("username");
+    alert("Logged out successfully.");
+    document.getElementById("loginButton").style.display = 'block'; // Show login button
+    document.getElementById("logoutButton").style.display = 'none'; // Hide logout button
+  }
+
+  // Check if user is already logged in on page load
+  document.addEventListener("DOMContentLoaded", function() {
+    var storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      document.getElementById("loginButton").style.display = 'none'; // Hide login button
+      document.getElementById("logoutButton").style.display = 'block'; // Show logout button
+      alert("Welcome back, " + storedUsername + "!");
+    } else {
+      document.getElementById("loginButton").style.display = 'block'; // Show login button
+      document.getElementById("logoutButton").style.display = 'none'; // Hide logout button
+    }
+  });
+</script>
+
+
 </html>
