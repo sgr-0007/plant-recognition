@@ -116,6 +116,57 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
   });
+
+  const plantSuggestion = document.getElementById("suggestionForm");
+  plantSuggestion.addEventListener("submit", function(event){
+    event.preventDefault();
+
+    // Gather data from the suggestion form
+    const suggestionFormData = {
+      plantID: document.getElementById("plantIDInput").value,
+      suggestedName: document.getElementById("suggestion").value,
+      identifiedBy: document.getElementById("username").value,
+      status: "Not Approved",
+      approved: false
+    };
+    console.log("Collected suggestion data: ", suggestionFormData);
+    openPlantsIDB().then((db) =>{
+      const plantId = parseInt(suggestionFormData.plantID);
+      console.log("PLANT ID: ", suggestionFormData.plantID);
+      getPlantById(db, plantId)
+        .then((plant) => {
+          if(plant){
+            console.log("PLANT FOUND");
+            const plantidentificationID = Math.floor(Math.random() * 10000);
+
+            const newIdentification = {
+              plantidentificationid: plantidentificationID,
+              suggestedname: suggestionFormData.suggestedName,
+              identifiedBy: suggestionFormData.identifiedBy
+            };
+
+            plant.identifications.push(newIdentification);
+
+            // Update the plant data in IndexedDB
+            const transaction = db.transaction(["plants"], "readwrite");
+            const plantStore = transaction.objectStore("plants");
+            const updateRequest = plantStore.put(plant);
+
+            updateRequest.onsuccess = () => {
+                console.log("Plant data updated successfully.");
+            };
+
+            updateRequest.onerror = (event) => {
+                console.error("Error updating plant data:", event.target.error);
+            };
+
+          }else{
+            console.log("PLANT NOT FOUND");
+          }
+        })
+    })
+  });
+
 });
 
 // You need to ensure functions like `openPlantsIDB` and `addNewPlantToSync` are defined and properly handle the data structure.
