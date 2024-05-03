@@ -151,19 +151,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
             plant.identifications.push(newIdentification);
 
+            openSyncPlantsIDB().then((db) =>{
+              const transaction = db.transaction(["sync-plants"], "readwrite");
+              const plantStore = transaction.objectStore("sync-plants");
+              const updateRequest = plantStore.put(plant);
+  
+              updateRequest.onsuccess = () => {
+                  console.log("Plant data updated successfully.");
+              };
+  
+              updateRequest.onerror = (event) => {
+                  console.error("Error updating plant data:", event.target.error);
+              };
+            })
             // Update the plant data in IndexedDB
-            const transaction = db.transaction(["plants"], "readwrite");
-            const plantStore = transaction.objectStore("plants");
-            const updateRequest = plantStore.put(plant);
-
-            updateRequest.onsuccess = () => {
-                console.log("Plant data updated successfully.");
-            };
-
-            updateRequest.onerror = (event) => {
-                console.error("Error updating plant data:", event.target.error);
-            };
-
           }else{
             console.log("PLANT NOT FOUND");
           }
