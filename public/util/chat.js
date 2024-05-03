@@ -89,7 +89,13 @@ function getChat() {
 
 
 function connectToRoom() {
-    name = "sagar";
+    var storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+        name = storedUsername;
+    } else {
+        name = prompt('What is your name?');
+        localStorage.setItem("username", name);
+    }
     if (!name) name = 'Unknown-' + Math.random();
     socket.emit('create or join', roomNo, name);
 }

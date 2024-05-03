@@ -7,6 +7,7 @@
         <title>Plant Details</title>
         <link rel="stylesheet" href="/stylesheets/style.css" />
         <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="/node_modules/bootstrap-icons/font/bootstrap-icons.min.css">
         <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
         <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
         <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -25,7 +26,7 @@
                 <div class="row">
                         <div class="col-md-6">
                                 <div class="card">
-                                        <div class="card-header">
+                                        <div class="card-header" style="font-weight: bold;">
                                                 Plant Details
                                         </div>
 
@@ -56,7 +57,7 @@
 
 
                                 <div class="card">
-                                        <div class="card-header">
+                                        <div class="card-header" style="font-weight: bold;">
                                                 Plant Details from DB Pedia
                                         </div>
 
@@ -79,8 +80,9 @@
                         </div>
                         <div class="col-md-6">
                                 <div class="card">
-                                        <div class="card-header">
-                                                Leave a comment
+                                        <div class="card-header" style="font-weight: bold;">
+                                                Join the discussion
+
                                         </div>
                                         <div class="card-body">
                                                 <div id="who_you_are" style="display: inline"></div>, you are in room:
@@ -91,10 +93,12 @@
                                                 <div class="form-group">
                                                         <textarea class="form-control" id="chat_input" name="chat_input"
                                                                 rows="1"></textarea>
-                                                </div>
-                                                <button type="button" onclick="sendChatText()" class="btn btn-primary"
-                                                        style="margin-top: 20px;"> Send
+                                                                <button type="button" onclick="sendChatText()" class="btn btn-primary"
+                                                        style="margin-top: 20px; float: right;"> <i class="bi bi-send-fill"></i>
+                                                        Send
                                                 </button>
+                                                </div>
+                                                
                                         </form>
                                 </div>
                         </div>
