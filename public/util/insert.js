@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const suggestionFormData = {
       plantID: document.getElementById("plantIDInput").value,
       suggestedName: document.getElementById("suggestion").value,
-      identifiedBy: document.getElementById("username").value,
+      identifiedBy: document.getElementById("suggesterUsername").value,
       status: "Not Approved",
       approved: false
     };
