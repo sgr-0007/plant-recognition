@@ -121,6 +121,10 @@ document.addEventListener("DOMContentLoaded", function () {
   plantSuggestion.addEventListener("submit", function(event){
     event.preventDefault();
 
+    let modal = document.getElementById("suggestModal");
+    let modalInstance = bootstrap.Modal.getInstance(modal);
+    modalInstance.hide();
+
     // Gather data from the suggestion form
     const suggestionFormData = {
       plantID: document.getElementById("plantIDInput").value,
