@@ -3,8 +3,10 @@ let roomNo = null;
 let socket = io();
 let plantid = "";
 
-//TODO : get the name from session
-
+function isOnline() {
+    return navigator.onLine;
+  }
+  
 function init() {   
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -36,10 +38,28 @@ function init() {
  * and sends the message via  socket
  */
 function sendChatText() {
+    if(!isOnline()){
+        //save to indexeddb
+        saveToIndexedDB();
+        return;
+    }   
     let chatText = document.getElementById('chat_input').value;
     socket.emit('chat', roomNo, name, chatText);
     //call the API to save the chat
     saveChat();
+}
+function saveToIndexedDB(){
+    let chatText = document.getElementById('chat_input').value;
+    let chat = {
+        comment: chatText,
+        commentedby: name
+    }
+    console.log('Chat:', chat);
+    //save to indexeddb
+    saveChatToIndexedDB(chat);
+}
+function saveChatToIndexedDB(chat){
+    
 }
 
 function saveChat() {
@@ -121,4 +141,5 @@ function hideLoginInterface(room, userId) {
     document.getElementById('who_you_are').innerHTML= userId;
     document.getElementById('in_room').innerHTML= ' '+room;
 }
+
 
