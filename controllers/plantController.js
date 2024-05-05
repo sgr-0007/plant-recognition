@@ -195,10 +195,10 @@ exports.postPlantIdentification = async (req, res) => {
 
 exports.addComment = async (req, res) => {
   const { plantid } = req.params;
-  const { comment, commentedby } = req.body;
+  const { comment, commentedby, updateCommentId } = req.body;
 
-  // Error handling for missing data
-  if (!plantid || !comment || !commentedby) {
+  // Error handling for missing data (plantid and comment are still required)
+  if (!plantid || !comment) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
@@ -209,26 +209,31 @@ exports.addComment = async (req, res) => {
     if (!plant) {
       return res.status(404).json({ message: 'Plant not found' });
     }
+      // Find the comment
+      const commentIndex = plant.comments.findIndex(comment => comment.commentid === updateCommentId);
 
-    // Create a new comment object
-    const newComment = {
-      commentid: Math.floor(Math.random() * 100000) + 1, 
-      commentedby: commentedby,
-      comment,
-    };
+      if (commentIndex === -1) {
+      const newComment = {
+        commentid: Math.floor(Math.random() * 100000) + 1, 
+        commentedby: commentedby,
+        comment,
+      };
 
-    // Add the new comment to the plant's comments array
-    plant.comments.push(newComment);
+      // Add the new comment to the plant's comments array
+      plant.comments.push(newComment);
+      }   
 
     // Save the updated plant document
     const updatedPlant = await plant.save();
+    return res.status(200).json({ message: 'Comment added successfully', comment: updatedPlant.comments });
 
-    return res.status(201).json({ message: 'Comment added successfully', comment: newComment });
+    
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
   }
-};
+
+}
 
 exports.getComments = async (req, res) => {
   const { plantid } = req.params;
@@ -244,3 +249,5 @@ exports.getComments = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+

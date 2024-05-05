@@ -2,17 +2,24 @@ let name = null;
 let roomNo = null;
 let socket = io();
 let plantid = "";
+var storedUsername = localStorage.getItem("username");
+if (storedUsername) {
+    name = storedUsername;
+} else {
+    name = prompt('What is your name?');
+    localStorage.setItem("username", name);
+}
 
 function isOnline() {
     return navigator.onLine;
-  }
-  
-function init() {   
+}
+
+function init() {
 
     const urlParams = new URLSearchParams(window.location.search);
-     plantid = urlParams.get('plantid');
-     roomNo  = plantid;
-     connectToRoom();
+    plantid = urlParams.get('plantid');
+    roomNo = plantid;
+    connectToRoom();
     // called when someone joins the room. If it is someone else it notifies the joining of the room
     socket.on('joined', function (room, userId) {
         if (userId === name) {
@@ -20,7 +27,7 @@ function init() {
             hideLoginInterface(room, userId);
         } else {
             // notifies that someone has joined the room
-            writeOnHistory('<b>'+userId+'</b>' + ' joined room ' + room);
+            writeOnHistory('<b>' + userId + '</b>' + ' joined room ' + room);
         }
     });
     // called when a message is received
@@ -34,37 +41,67 @@ function init() {
 }
 
 /**
- * called when the Send button is pressed. It gets the text to send from the interface
+ * It gets the text to send from the interface
  * and sends the message via  socket
  */
 function sendChatText() {
-    if(!isOnline()){
-        //save to indexeddb
-        saveToIndexedDB();
-        return;
-    }   
-    let chatText = document.getElementById('chat_input').value;
-    socket.emit('chat', roomNo, name, chatText);
-    //call the API to save the chat
-    saveChat();
-}
-function saveToIndexedDB(){
-    let chatText = document.getElementById('chat_input').value;
-    let chat = {
-        comment: chatText,
-        commentedby: name
+    if (!isOnline()) {
+        const discussionFormData = {
+            plantID: plantid,
+            commentedby: name,
+            comment: document.getElementById("chat_input").value
+        };
+        console.log("Collected suggestion data: ", discussionFormData);
+        openPlantsIDB().then((db) => {
+            const plantId = parseInt(plantid);
+            console.log("PLANT ID: ", plantid);
+            getPlantById(db, plantId)
+                .then((plant) => {
+                    if (plant) {
+                        console.log("PLANT FOUND");
+                        const commentID = Math.floor(Math.random() * 10000);
+
+                        const newComment = {
+                            commentid: commentID,
+                            commentedby: discussionFormData.commentedby,
+                            comment: discussionFormData.comment
+                        };
+
+                        plant.comments.push(newComment);
+                        openPlantsIDB().then((db) => {
+                            const transaction = db.transaction(["plants"], "readwrite");
+                            const plantStore = transaction.objectStore("plants");
+                            const updateRequest = plantStore.put(plant);
+
+                            updateRequest.onsuccess = () => {
+                                console.log("Plant data updated successfully.");
+                                alert("You are offline. Your comment will be saved and synced when you are back online.");
+                                
+                            };
+
+                            updateRequest.onerror = (event) => {
+                                console.error("Error updating plant data:", event.target.error);
+                            };
+                        })
+                        // Update the plant data in IndexedDB
+                    } else {
+                        console.log("PLANT NOT FOUND");
+                    }
+                })
+        })
     }
-    console.log('Chat:', chat);
-    //save to indexeddb
-    saveChatToIndexedDB(chat);
-}
-function saveChatToIndexedDB(chat){
-    
+    else {
+        let chatText = document.getElementById('chat_input').value;
+        socket.emit('chat', roomNo, name, chatText);
+        saveChat(chatText,Math.floor(Math.random() * 100000) + 1);
+    }
+
 }
 
-function saveChat() {
-    let chatText = document.getElementById('chat_input').value;
+function saveChat(chatTextInput, commentId) {
+    let chatText = chatTextInput;
     let chat = {
+        updateCommentId : commentId,
         comment: chatText,
         commentedby: name
     }
@@ -106,16 +143,38 @@ function getChat() {
         });
 }
 
+function getIdbChat() {
+    openPlantsIDB().then((db) => {
+        const plantId = parseInt(plantid);
+        console.log("PLANT ID: ", plantid);
+        getPlantById(db, plantId)
+            .then((plant) => {
+                if (plant) {
+                    console.log("PLANT FOUND");
+                    let history = document.getElementById('history');
+                    history.innerHTML = '';
+                    plant.comments.forEach(comment => {
+                        let who = comment.commentedby
+                        if (comment.commentedby === name) who = 'Me';                        
+                        writeOnHistory('<b>' + who + ':</b> ' + comment.comment);
+                        
+                    });
+                } else {
+                    console.log("PLANT NOT FOUND");
+                }
+            })
+    }
+    )
+}
 
+// call getsychchat when the network is online using event listener
+window.addEventListener('online', () => {
+    getIdbChat();
+});
+ 
 
 function connectToRoom() {
-    var storedUsername = localStorage.getItem("username");
-    if (storedUsername) {
-        name = storedUsername;
-    } else {
-        name = prompt('What is your name?');
-        localStorage.setItem("username", name);
-    }
+
     if (!name) name = 'Unknown-' + Math.random();
     socket.emit('create or join', roomNo, name);
 }
@@ -138,8 +197,8 @@ function writeOnHistory(text) {
  */
 function hideLoginInterface(room, userId) {
 
-    document.getElementById('who_you_are').innerHTML= userId;
-    document.getElementById('in_room').innerHTML= ' '+room;
+    document.getElementById('who_you_are').innerHTML = userId;
+    document.getElementById('in_room').innerHTML = ' ' + room;
 }
 
 

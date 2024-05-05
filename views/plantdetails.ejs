@@ -15,6 +15,8 @@
         <link rel='stylesheet' href='/stylesheets/style.css' />
         <script src="/javascripts/index.js"></script>
         <script src="/util/chat.js"></script>
+        <script src="/util/idb-utility.js"></script>
+
 
 
 
@@ -89,7 +91,7 @@
                                                 <div id="in_room" style="display: inline"></div>
                                         </div>
                                         <div id="history" class="boxed"></div>
-                                        <form onsubmit="return false;" >
+                                        <form id="discissionForm" onsubmit="return false;" >
                                                 <div class="form-group">
                                                         <textarea class="form-control" id="chat_input" name="chat_input"
                                                                 rows="1"></textarea>
