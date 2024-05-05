@@ -143,7 +143,7 @@ function getChat() {
         });
 }
 
-function getIdbChat() {
+function getIdbChatAndPushIntoNetworkDb() {
     openPlantsIDB().then((db) => {
         const plantId = parseInt(plantid);
         console.log("PLANT ID: ", plantid);
@@ -157,7 +157,8 @@ function getIdbChat() {
                         let who = comment.commentedby
                         if (comment.commentedby === name) who = 'Me';                        
                         writeOnHistory('<b>' + who + ':</b> ' + comment.comment);
-                        
+                        saveChat(comment.comment, comment.commentid);
+
                     });
                 } else {
                     console.log("PLANT NOT FOUND");
@@ -169,7 +170,8 @@ function getIdbChat() {
 
 // call getsychchat when the network is online using event listener
 window.addEventListener('online', () => {
-    getIdbChat();
+    alert("You are back online. Your comments will be synced now.");
+    getIdbChatAndPushIntoNetworkDb();
 });
  
 

@@ -1,3 +1,4 @@
+const { Alert } = require("bootstrap");
 const Plant = require("../models/plant");
 
 exports.createPlant = async (req, res) => {
@@ -216,7 +217,7 @@ exports.addComment = async (req, res) => {
       const newComment = {
         commentid: Math.floor(Math.random() * 100000) + 1, 
         commentedby: commentedby,
-        comment,
+        comment : comment,
       };
 
       // Add the new comment to the plant's comments array
