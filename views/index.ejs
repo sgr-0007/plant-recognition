@@ -35,6 +35,7 @@
       rel="stylesheet"
       href="/node_modules/bootstrap/dist/css/bootstrap-utilities.rtl.css"
     />
+    <script src="/javascripts/index.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.esm.js"></script>
@@ -65,6 +66,9 @@
           <div class="modal-body">
             <form
               id="plantForm"
+              enctype="multipart/form-data"
+              method="POST"
+              action="/api/plantCreate"
               onsubmit="return validateForm()"
             >
               <!-- Name of the plant -->
@@ -84,15 +88,6 @@
               <label for="uploadImage" class="form-label my-2"
                 >Upload image <span style="color: red">*</span></label
               >
-              <script>
-                function displayFileName() {
-                  const fileInput = document.getElementById("fileInput");
-                  const fileNameDisplay =
-                    document.getElementById("fileNameDisplay");
-                  const file = fileInput.files[0];
-                  fileNameDisplay.textContent = file ? file.name : "";
-                }
-              </script>
               <div class="d-flex align-items-center">
                 <label for="fileInput" class="btn btn-primary">
                   Select from disk
@@ -263,71 +258,6 @@
                 Post!
               </button>
             </form>
-
-            <script>
-              document.addEventListener('DOMContentLoaded', function() {
-                var storedUsername = localStorage.getItem('username');
-                if (storedUsername) {
-                  document.getElementById('userNickname').value = storedUsername;
-                  document.getElementById('userNickname').place = storedUsername;
-                }
-              });
-            </script>
-
-            <script>
-              function validateForm() {
-                console.log("INSIDE THE VALIDATE FORM");
-                const fileInput = document.getElementById("fileInput").files[0];
-                if (!fileInput) {
-                  alert("Please upload the plant image!");
-                  return false;
-                }
-                return true;
-              }
-            </script>
-
-            <script>
-              const switches = document.querySelectorAll(
-                'input[type="checkbox"]'
-              );
-
-              // Loop through each switch
-              switches.forEach((switchElement) => {
-                // Add event listener for change event
-                switchElement.addEventListener("change", function () {
-                  // Update the value attribute of the switch based on its checked status
-                  this.value = this.checked ? "true" : "false";
-                });
-              });
-            </script>
-
-            <script>
-              document
-                .getElementById("newPostButton")
-                .addEventListener("click", async () => {
-                  try {
-                    const position = await getCurrentPosition();
-                    document.getElementById("latitudeInput").value =
-                      position.coords.latitude;
-                    document.getElementById("longitudeInput").value =
-                      position.coords.longitude;
-                    alert("Location retrieved successfully.");
-                    // document.getElementById("plantForm").submit(); // Automatically submit the form
-                  } catch (error) {
-                    console.error("Error retrieving location:", error);
-                  }
-                });
-
-              async function getCurrentPosition() {
-                return new Promise((resolve, reject) => {
-                  if ("geolocation" in navigator) {
-                    navigator.geolocation.getCurrentPosition(resolve, reject);
-                  } else {
-                    reject(new Error("Geolocation API is not supported."));
-                  }
-                });
-              }
-            </script>
           </div>
           <div class="modal-footer">
             <button
@@ -402,14 +332,17 @@
           </div>
           <!-- Modal body -->
           <div class="modal-body">
-            <form id="suggestionForm" method="POST" action="">
+            <form id="suggestionForm" method="POST" enctype="application/x-www-form-urlencoded" action="/api/:plantid/plantIdentification">
+            <!-- PlantID to send to the controller -->
+            <input type="hidden" name="plantid" id="plantIDInput" value="">
             <!-- Username -->
-            <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="username" placeholder="Please enter your username" />
+
+            <label for="suggesterUsername" class="form-label">Username</label>
+            <input type="text" class="form-control" id="suggesterUsername" placeholder="Please enter your username" />
             <!-- Suggestion -->
             <label for="suggestion" class="form-label">Suggestion</label>
             <input type="text" class="form-control" id="suggestion" placeholder="Please enter your suggestion for this plant" />
-            <button type="button" class="btn btn-primary my-3" style="width: 100%; background-color: #22338f">
+            <button type="submit" class="btn btn-primary my-3" style="width: 100%; background-color: #22338f">
               Suggest!
             </button>
           </form>
@@ -429,23 +362,11 @@
       </div>
     </div>
 
-    <script>
-      function openModal(modal, plantId, plantName) {
-        const modalInstance = new bootstrap.Modal(modal);
-        modalInstance.show();
-        const plantID = modal.querySelector('#plantID');
-        plantID.textContent = plantId;
-        const plantNAME = modal.querySelector('#plantName');
-        plantNAME.textContent = plantName;
-      }
-      function closeModal(modal) {
-        modal.style.display = "none";
-      }
-    </script>
     <!-- End of suggest modal -->
 
-    <div class="container mt-4">
-      <!-- <button onclick="manualSync()">Sync Now</button> -->
+    <div class="mt-4 w-60">
+            <!-- <button onclick="manualSync()">Sync Now</button> -->
+
       <div
         id="plant_list"
         class="d-flex flex-column justify-content-center align-items-center"
@@ -500,7 +421,5 @@
       document.getElementById("logoutButton").style.display = 'none'; // Hide logout button
     }
   });
-</script>
-
-
+</script
 </html>

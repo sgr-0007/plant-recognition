@@ -1,20 +1,23 @@
 let plantsData = { plants: [] }; // Global variable to store plant data
 
-
 function sortPlants(sortType) {
   let sortedPlants = [...plantsData.plants];
   switch (sortType) {
-    case 'newest':
-      sortedPlants.sort((a, b) => new Date(b.createddate) - new Date(a.createddate));
+    case "newest":
+      sortedPlants.sort(
+        (a, b) => new Date(b.createddate) - new Date(a.createddate)
+      );
       break;
-    case 'oldest':
-      sortedPlants.sort((a, b) => new Date(a.createddate) - new Date(b.createddate));
+    case "oldest":
+      sortedPlants.sort(
+        (a, b) => new Date(a.createddate) - new Date(b.createddate)
+      );
       break;
-    case 'name':
+    case "name":
       sortedPlants.sort((a, b) => a.name.localeCompare(b.name));
       break;
     default:
-      console.error('Unsupported sort type');
+      console.error("Unsupported sort type");
       return;
   }
   plantsData.plants = sortedPlants; // Update global plantsData with sorted data
@@ -22,17 +25,20 @@ function sortPlants(sortType) {
   insertPlantsInList(plantsData); // Re-render the plant list
 }
 
-
 const insertPlantsInList = (plants) => {
   const plantList = document.getElementById("plant_list");
-  plantList.innerHTML = '';
-
-
+  plantList.innerHTML = "";
 
   if (plants.plants.length === 0) {
     console.log("HELLLLOOOO");
     // Create a container div
     const div = document.createElement("div");
+    div.style.position = "fixed";
+    div.style.top = "50px";
+    div.style.left = "0";
+    div.style.right = "0";
+    div.style.bottom = "0";
+    div.style.overflow = "hidden";
     div.style.display = "grid";
     div.style.placeItems = "center";
     div.style.height = "100vh";
@@ -54,7 +60,7 @@ const insertPlantsInList = (plants) => {
     img.alt = "Drought Images";
     img.style.width = "35vw";
     img.style.height = "auto";
-    img.style.maxWidth = "100%";
+    img.style.maxWidth = "75%";
     img.style.margin = "0";
     img.style.padding = "0";
     flexContainer.appendChild(img);
@@ -162,11 +168,9 @@ const insertPlantsInList = (plants) => {
 
       const date = new Date(plant.createddate);
 
-
       const createdDateText = document.createElement("p");
       createdDateText.className = "card-text";
       createdDateText.textContent = `Created on: ${date.toLocaleDateString()}`;
-
 
       // Plant image
       const img = document.createElement("img");
@@ -182,17 +186,16 @@ const insertPlantsInList = (plants) => {
 
       // Assume `plant.image` is retrieved as a Blob from IndexedDB
       if (plant.image instanceof Blob) {
-        console.log('plant image is Blob')
+        console.log("plant image is Blob");
         img.src = URL.createObjectURL(plant.image);
         img.onload = () => {
           URL.revokeObjectURL(img.src); // Clean up the blob URL after loading
         };
       } else {
-        console.log('plant image not Blob')
+        console.log("plant image not Blob");
         // If not a Blob, handle as a normal URL or a data URL
         img.src = plant.image;
       }
-
 
       card.appendChild(img);
 
@@ -347,11 +350,13 @@ window.onload = function () {
         console.log(newPlants);
         console.log(typeof newPlants);
         plantsData = newPlants;
-        navigator.serviceWorker.ready.then(registration => {
-          return registration.sync.register('sync-plant-data');
-        }).catch(err => {
-          console.error('Error registering sync:', err);
-        });
+        navigator.serviceWorker.ready
+          .then((registration) => {
+            return registration.sync.register("sync-plant-data");
+          })
+          .catch((err) => {
+            console.error("Error registering sync:", err);
+          });
         openPlantsIDB().then((db) => {
           insertPlantsInList(newPlants, db);
           deleteAllExistingPlantsFromIDB(db).then(() => {
@@ -362,11 +367,13 @@ window.onload = function () {
         });
       });
   } else {
-    navigator.serviceWorker.ready.then(registration => {
-      return registration.sync.register('sync-plant-data');
-    }).catch(err => {
-      console.error('Error registering sync:', err);
-    });
+    navigator.serviceWorker.ready
+      .then((registration) => {
+        return registration.sync.register("sync-plant-data");
+      })
+      .catch((err) => {
+        console.error("Error registering sync:", err);
+      });
 
     // Handle offline scenario by loading plants from IndexedDB
     console.log("Offline mode");
