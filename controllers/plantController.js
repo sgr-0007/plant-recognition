@@ -1,4 +1,3 @@
-const { Alert } = require("bootstrap");
 const Plant = require("../models/plant");
 
 exports.createPlant = async (req, res) => {
@@ -211,7 +210,7 @@ exports.addComment = async (req, res) => {
       return res.status(404).json({ message: 'Plant not found' });
     }
       // Find the comment
-      const commentIndex = plant.comments.findIndex(comment => comment.commentid === updateCommentId);
+      const commentIndex = plant.comments.findIndex(x => x.comment === comment && x.commentedby === commentedby);
 
       if (commentIndex === -1) {
       const newComment = {
