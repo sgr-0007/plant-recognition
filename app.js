@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
+const cors = require('cors');
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -16,7 +18,7 @@ var plantDetailsRouter = require('./fe-routes/plantdetails');
 const PORT = process.env.PORT || 5000;
 //please enter your local MONGO creds, It's working for me. 
 //const mongoDB = 'mongodb+srv://faiqiqbal37:plant1234@plant-recognition.abudcv7.mongodb.net/';
- const mongoDB = 'mongodb://localhost:27017/plantDb'
+const mongoDB = 'mongodb://localhost:27017/plantDb'
 
 // Connect to MongoDB
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -25,6 +27,8 @@ mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
 
 var app = express();
 // const { Client } = require('sparql-http-client');
+
+app.use(cors());
 
 
 app.use('/node_modules', express.static(__dirname + '/node_modules'));
@@ -63,6 +67,8 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
