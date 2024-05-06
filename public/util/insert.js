@@ -11,9 +11,7 @@ const readFileAsDataUrl = (file) => {
   });
 };
 
-function isOnline() {
-  return navigator.onLine;
-}
+let plantID = '';
 
 document.addEventListener("DOMContentLoaded", function () {
   const plantForm = document.getElementById("plantForm");
@@ -98,9 +96,10 @@ document.addEventListener("DOMContentLoaded", function () {
       status: "Not Approved",
       approved: false,
     };
+    plantID = suggestionFormData.plantID;
     const plantidentificationID = Math.floor(Math.random() * 10000);
     console.log("Collected suggestion data: ", suggestionFormData);
-    if (!isOnline) {
+    if (!navigator.onLine) {
       openPlantsIDB().then((db) => {
         const plantId = parseInt(suggestionFormData.plantID);
         console.log("PLANT ID: ", suggestionFormData.plantID);
@@ -135,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         });
       });
-    } else {
+    } else if(navigator.onLine) {
       console.log("OJNIJHHHUHH");
       saveIdentification(
         suggestionFormData.plantID,
@@ -176,30 +175,24 @@ function saveIdentification(
 }
 
 function getIDBIdentificationAndPushIntoNetworkDb() {
-  openPlantsIDB.then((db) => {
-    const plantId = parseInt(plantid);
+  openPlantsIDB().then((db) => {
+    console.log("PLANT ID IN IDVB: ", plantID);
+    const plantId = parseInt(plantID);
     console.log("PLANT ID: ", plantId);
     getPlantById(db, plantId).then((plant) => {
       if (plant) {
         console.log("PLANT FOUND");
         const saveIdentificationPromises = [];
-        plant.identifications.forEach((identification) => {
+        plant.identifications.forEach(identification => {
           saveIdentificationPromises.push(
             saveIdentification(
+              plantId,
               identification.plantidentificationid,
-              identification.identifiedby,
-              identification.suggestedname
+              identification.suggestedname,
+              identification.identifiedby
             )
           );
         });
-
-        Promise.all(saveIdentification)
-          .then(() => {
-            console.log("ALL IDENTIS SAVED");
-          })
-          .catch((error) => {
-            console.error("ERROR SAVING IDENTI", error);
-          });
       } else {
         console.log("PLANT NOT FOUND IN GET IDB PUSH TO NWK");
       }
