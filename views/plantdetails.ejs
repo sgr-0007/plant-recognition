@@ -70,6 +70,10 @@
                                                                 <ul class="list-group">
                                                                         <li class="list-group-item">Name: <%= plantDetailsDB.label %></li>
                                                                         <li class="list-group-item">Description: <%= plantDetailsDB.description %></li>
+                                                                        <li class="list-group-item">
+                                                                                URL to DBPedia:
+                                                                                <a href="<%= plantDetailsDB.url %>" target="_blank">Visit DBpedia Page</a>
+                                                                        </li>
                                                                 </ul>
                                                         <% } else { %>
                                                                 <div class="alert alert-warning" role="alert">

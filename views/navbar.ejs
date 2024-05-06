@@ -141,14 +141,14 @@
                     <button
                             id = "loginButton"
                             type="button"
-                            class="btn btn-primary rounded-pill d-flex justify-content-center align-items-center"
-                            style="width: 120px; height: 35px"
+                            style="display: none"
+                            class="btn btn-primary"
                             data-bs-toggle="modal"
                             data-bs-target="#staticBackdrop"
                     >
                         Login
                     </button>
-                    <button type="button" id="logoutButton" class="btn btn-secondary" onclick="logout()" style="display: none;">
+                    <button type="button" id="logoutButton" class="btn btn-primary" onclick="logout()" style="display: none;">
                         Logout
                     </button>
                 </div>
@@ -174,7 +174,6 @@
 
     function logout() {
         localStorage.removeItem("username");
-        alert("Logged out successfully.");
         document.getElementById("loginButton").style.display = 'block'; // Show login button
         document.getElementById("logoutButton").style.display = 'none'; // Hide logout button
     }
@@ -185,7 +184,6 @@
         if (storedUsername) {
             document.getElementById("loginButton").style.display = 'none'; // Hide login button
             document.getElementById("logoutButton").style.display = 'block'; // Show logout button
-            alert("Welcome back, " + storedUsername + "!");
         } else {
             document.getElementById("loginButton").style.display = 'block'; // Show login button
             document.getElementById("logoutButton").style.display = 'none'; // Hide logout button
