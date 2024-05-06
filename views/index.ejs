@@ -391,4 +391,35 @@
 <script src="/util/index.js"></script>
 <script src="/util/insert.js"></script>
 
+<script>
+  function login() {
+    var username = document.getElementById("username").value;
+    if (username) {
+      localStorage.setItem("username", username);
+      document.getElementById("loginButton").style.display = 'none'; // Hide login button
+      document.getElementById("logoutButton").style.display = 'block'; // Show logout button
+      location.reload()
+    } else {
+      alert("Please enter a username.");
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem("username");
+    document.getElementById("loginButton").style.display = 'block'; // Show login button
+    document.getElementById("logoutButton").style.display = 'none'; // Hide logout button
+  }
+
+  // Check if user is already logged in on page load
+  document.addEventListener("DOMContentLoaded", function() {
+    var storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      document.getElementById("loginButton").style.display = 'none'; // Hide login button
+      document.getElementById("logoutButton").style.display = 'block'; // Show logout button
+    } else {
+      document.getElementById("loginButton").style.display = 'block'; // Show login button
+      document.getElementById("logoutButton").style.display = 'none'; // Hide logout button
+    }
+  });
+</script
 </html>

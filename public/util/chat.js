@@ -118,6 +118,11 @@ function saveChat(chatTextInput, commentId) {
         .then(response => response.json())
         .then(data => {
             console.log('ChatSuccess:', data);
+            data.comments.forEach(comment => {
+                let who = comment.commentedby
+                if (comment.commentedby === name) who = 'Me';
+                writeOnHistory('<b>' + who + ':</b> ' + comment.comment);
+            });
         })
         .catch((error) => {
             console.error('ChatError:', error);
@@ -153,21 +158,10 @@ function getIdbChatAndPushIntoNetworkDb() {
             .then((plant) => {
                 if (plant) {
                     console.log("PLANT FOUND");
-                    const saveChatPromises = [];
                     plant.comments.forEach(comment => {
-                        saveChatPromises.push(saveChat(comment.comment, comment.commentid));
+                        saveChat(comment.comment, comment.commentid)
                     });
 
-                    Promise.all(saveChatPromises)
-                        .then(() => {
-                            let history = document.getElementById('history');
-                            history.innerHTML = '';
-                            console.log("All comments saved successfully");
-                            getChat(); 
-                        })
-                        .catch(error => {
-                            console.error("Error saving comments:", error);
-                        });
                 } else {
                     console.log("PLANT NOT FOUND");
                 }
