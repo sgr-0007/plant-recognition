@@ -172,6 +172,9 @@ exports.postPlantIdentification = async (req, res) => {
   const { plantid } = req.params;
   const { suggestedname, identifiedby } = req.body;
   try {
+    if(!plantid || !suggestedname || !identifiedby){
+      return res.status(500).json({ error: 'Missing required fields' });
+    }
     console.log("Plant ID for identification: ", plantid);
     console.log("Plant identification details: ", suggestedname, ", ",identifiedby);
     const plant = await Plant.findOne({ plantid });
@@ -187,7 +190,6 @@ exports.postPlantIdentification = async (req, res) => {
         suggestedname,
         identifiedby,
       };
-  
       plant.identifications.push(newIdentification);
 
     }

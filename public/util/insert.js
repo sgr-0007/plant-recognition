@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       });
     } else if(navigator.onLine) {
-      console.log("OJNIJHHHUHH");
+      console.log("Online mode. Saving suggestion to network DB.");
       saveIdentification(
         suggestionFormData.plantID,
         plantidentificationID,
