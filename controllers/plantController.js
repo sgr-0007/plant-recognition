@@ -80,19 +80,21 @@ exports.getAllPlants = async (req, res) => {
 exports.searchPlant = async (req, res) => {
   const plantName = req.query.name;
   if (!plantName) {
-    res.status(400).json({ error: 'Plant name is required' });
-    return;
+    return res.status(400).json({ error: 'Plant name is required' });
   }
 
   const endpointUrl = 'https://dbpedia.org/sparql';
+  const resourceUrl = `http://dbpedia.org/resource/${encodeURIComponent(plantName)}`;
+
   const sparqlQuery = `
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX dbo: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     
     SELECT ?label ?description
     WHERE {
-      <http://dbpedia.org/resource/${encodeURIComponent(plantName)}> rdfs:label ?label .
-      <http://dbpedia.org/resource/${encodeURIComponent(plantName)}> dbo:abstract ?description .
+      <${resourceUrl}> rdfs:label ?label .
+      <${resourceUrl}> dbo:abstract ?description .
       FILTER (langMatches(lang(?label), "en") && langMatches(lang(?description), "en"))
     } LIMIT 1`;
 
@@ -105,13 +107,16 @@ exports.searchPlant = async (req, res) => {
 
     if (data.results.bindings.length > 0) {
       const bindings = data.results.bindings[0];
-      const plantDetails = {
+      res.json({
         label: bindings.label.value,
-        description: bindings.description.value
-      };
-      res.json(plantDetails);
+        description: bindings.description.value,
+        url: `http://dbpedia.org/page/${encodeURIComponent(plantName)}`  // Add the DBpedia URL to the response
+      });
     } else {
-      res.status(404).json({ error: 'No data found' });
+      res.status(404).json({
+        label: 'No data found',
+        description: 'No description available'
+      });
     }
   } catch (error) {
     console.error('Error fetching plant data from DBpedia', error);
