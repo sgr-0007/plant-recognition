@@ -239,3 +239,21 @@ function openSyncPlantsIDB() {
         };
     });
 }
+const getPlantById = (plantDB, plantid) => {
+    return new Promise((resolve, reject) => {
+        const transaction = plantDB.transaction(["plants"], "readonly");
+        const plantStore = transaction.objectStore("plants");
+        const getRequest = plantStore.getAll();
+        console.log("PLANT: ", getRequest);
+        getRequest.onsuccess = () => {
+            const plants = getRequest.result;
+            const plant = plants.find(plant => plant.plantid === plantid);
+            console.log(plant);
+            resolve(plant);
+        };
+        getRequest.onerror = (event) => {
+            console.log("Event error: ", event.target.error);
+            reject(event.target.error);
+        };
+    });
+};

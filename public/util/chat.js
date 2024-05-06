@@ -1,54 +1,79 @@
-let name = null;
+let name = localStorage.getItem("username") || prompt('What is your name?');
+localStorage.setItem("username", name);
+
 let roomNo = null;
 let socket = io();
 let plantid = "";
 
-//TODO : get the name from session
+function isOnline() {
+    return navigator.onLine;
+}
 
-function init() {   
-
+function init() {
     const urlParams = new URLSearchParams(window.location.search);
-     plantid = urlParams.get('plantid');
-     roomNo  = plantid;
-     connectToRoom();
-    // called when someone joins the room. If it is someone else it notifies the joining of the room
-    socket.on('joined', function (room, userId) {
-        if (userId === name) {
-            // it enters the chat
-            hideLoginInterface(room, userId);
-        } else {
-            // notifies that someone has joined the room
-            writeOnHistory('<b>'+userId+'</b>' + ' joined room ' + room);
-        }
-    });
-    // called when a message is received
-    socket.on('chat', function (room, userId, chatText) {
-        let who = userId
-        if (userId === name) who = 'Me';
-        writeOnHistory('<b>' + who + ':</b> ' + chatText);
-    });
+    plantid = urlParams.get('plantid');
+    roomNo = plantid;
+    connectToRoom();
+
+    socket.on('joined', handleUserJoinedRoom);
+    socket.on('chat', handleChatReceived);
 
     getChat();
 }
 
-/**
- * called when the Send button is pressed. It gets the text to send from the interface
- * and sends the message via  socket
- */
 function sendChatText() {
-    let chatText = document.getElementById('chat_input').value;
-    socket.emit('chat', roomNo, name, chatText);
-    //call the API to save the chat
-    saveChat();
+    if (!isOnline()) {
+        const discussionFormData = {
+            plantID: plantid,
+            commentedby: name,
+            comment: document.getElementById("chat_input").value
+        };
+
+        saveChatOffline(discussionFormData.comment);
+    } else {
+        let chatText = document.getElementById('chat_input').value;
+        socket.emit('chat', roomNo, name, chatText);
+        saveChat(chatText, Math.floor(Math.random() * 100000) + 1);
+    }
 }
 
-function saveChat() {
-    let chatText = document.getElementById('chat_input').value;
+function saveChatOffline(commentText) {
+    openPlantsIDB().then((db) => {
+        const plantId = parseInt(plantid);
+        getPlantById(db, plantId)
+            .then((plant) => {
+                if (plant) {
+                    const commentID = Math.floor(Math.random() * 10000);
+                    const newComment = {
+                        commentid: commentID,
+                        commentedby: name,
+                        comment: commentText
+                    };
+                    plant.comments.push(newComment);
+
+                    const transaction = db.transaction(["plants"], "readwrite");
+                    const plantStore = transaction.objectStore("plants");
+                    const updateRequest = plantStore.put(plant);
+
+                    updateRequest.onsuccess = () => {
+                        alert("You are offline. Your comment will be synced when you are back online.");
+                    };
+
+                    updateRequest.onerror = (event) => {
+                        console.error("Error updating plant data:", event.target.error);
+                    };
+                }
+            });
+    });
+}
+
+function saveChat(chatText, commentId) {
     let chat = {
+        updateCommentId: commentId,
         comment: chatText,
         commentedby: name
-    }
-    console.log('Chat:', chat);
+    };
+
     fetch(`http://localhost:3000/api/plantdetails/${plantid}/comments`, {
         method: 'POST',
         headers: {
@@ -56,13 +81,13 @@ function saveChat() {
         },
         body: JSON.stringify(chat),
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log('ChatSuccess:', data);
-        })
-        .catch((error) => {
-            console.error('ChatError:', error);
-        });
+    .then(response => response.json())
+    .then(data => {
+        console.log('ChatSuccess:', data);
+    })
+    .catch((error) => {
+        console.error('ChatError:', error);
+    });
 }
 
 function getChat() {
@@ -72,31 +97,63 @@ function getChat() {
             'Content-Type': 'application/json',
         }
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log('getChatSuccess:', data);
-            data.comments.forEach(comment => {
-                let who = comment.commentedby
-                if (comment.commentedby === name) who = 'Me';
-                writeOnHistory('<b>' + who + ':</b> ' + comment.comment);
-            });
-        })
-        .catch((error) => {
-            console.error('getChatError:', error);
-        });
+    .then(response => response.json())
+    .then(getChatAndUpdateHistory)
+    .catch((error) => {
+        console.error('getChatError:', error);
+    });
 }
 
+function getIdbChatAndPushIntoNetworkDb() {
+    openPlantsIDB().then((db) => {
+        const plantId = parseInt(plantid);
+        getPlantById(db, plantId)
+            .then((plant) => {
+                if (plant) {
+                    const saveChatPromises = [];
+                    plant.comments.forEach(comment => {
+                        saveChatPromises.push(saveChat(comment.comment, comment.commentid));
+                    });
 
+                    Promise.all(saveChatPromises)
+                        .then(() => {
+                            console.log("All comments saved successfully");
+                            getChatAndUpdateHistory(plant);
+                        })
+                        .catch(error => {
+                            console.error("Error saving comments:", error);
+                        });
+                } else {
+                    console.log("PLANT NOT FOUND");
+                }
+            });
+    });
+}
+
+window.addEventListener('online', () => {
+    alert("You are back online. Your comments will be synced now.");
+    getIdbChatAndPushIntoNetworkDb();
+});
 
 function connectToRoom() {
-    name = "sagar";
     if (!name) name = 'Unknown-' + Math.random();
     socket.emit('create or join', roomNo, name);
 }
-/**
- * it appends the given html text to the history div
- * @param text: teh text to append
- */
+
+function handleUserJoinedRoom(room, userId) {
+    if (userId === name) {
+        hideLoginInterface(room, userId);
+    } else {
+        writeOnHistory('<b>' + userId + '</b>' + ' joined room ' + room);
+    }
+}
+
+function handleChatReceived(room, userId, chatText) {
+    let who = userId;
+    if (userId === name) who = 'Me';
+    writeOnHistory('<b>' + who + ':</b> ' + chatText);
+}
+
 function writeOnHistory(text) {
     let history = document.getElementById('history');
     let paragraph = document.createElement('p');
@@ -105,14 +162,7 @@ function writeOnHistory(text) {
     document.getElementById('chat_input').value = '';
 }
 
-/**
- * it hides the initial form and shows the chat
- * @param room the selected room
- * @param userId the user name
- */
 function hideLoginInterface(room, userId) {
-
-    document.getElementById('who_you_are').innerHTML= userId;
-    document.getElementById('in_room').innerHTML= ' '+room;
+    document.getElementById('who_you_are').innerHTML = userId;
+    document.getElementById('in_room').innerHTML = ' ' + room;
 }
-
