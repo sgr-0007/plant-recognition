@@ -179,18 +179,21 @@ exports.postPlantIdentification = async (req, res) => {
     if(!plant){
       return res.status(404).json({ error: 'Plant not found' });
     }
+    const identificationIndex = plant.identifications.findIndex(x => x.suggestedname === suggestedname && x.identifiedby === identifiedby);
 
-    const newIdentification = {
-      plantidentificationid: generateRandomID(),
-      suggestedname,
-      identifiedby,
-    };
+    if (identificationIndex === -1) {
+      const newIdentification = {
+        plantidentificationid: generateRandomID(),
+        suggestedname,
+        identifiedby,
+      };
+  
+      plant.identifications.push(newIdentification);
 
-    plant.identifications.push(newIdentification);
-    await plant.save();
+    }
 
-    console.log("Plant identi added successfully! ", newIdentification);
-    res.status(201).json({ message: 'Plant identification added successfully', identification: newIdentification });
+    const updatedIdentification = await plant.save();
+    res.status(201).json({ message: 'Plant identification added successfully', identification: updatedIdentification.identifications});
 
   } catch (error) {
     console.error('Error adding plant identification:', error);
