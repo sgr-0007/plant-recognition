@@ -96,6 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
       status: "Not Approved",
       approved: false,
     };
+
     plantID = suggestionFormData.plantID;
     const plantidentificationID = Math.floor(Math.random() * 10000);
     console.log("Collected suggestion data: ", suggestionFormData);
@@ -122,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
               updateRequest.onsuccess = () => {
                 console.log("Plant data updated successfully.");
+                alert("You are offline. Your suggestion will be saved and synced when you are back online.");
               };
 
               updateRequest.onerror = (event) => {
@@ -148,12 +150,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function saveIdentification(
   plantid,
-  identificationId,
+  identificationID,
   suggestionTextInput,
   identifiedBy
 ) {
   let identification = {
-    updateIdentificationId: identificationId,
+    plantidentificationid: identificationID,
     suggestedname: suggestionTextInput,
     identifiedby: identifiedBy,
   };
@@ -176,9 +178,7 @@ function saveIdentification(
 
 function getIDBIdentificationAndPushIntoNetworkDb() {
   openPlantsIDB().then((db) => {
-    console.log("PLANT ID IN IDVB: ", plantID);
     const plantId = parseInt(plantID);
-    console.log("PLANT ID: ", plantId);
     getPlantById(db, plantId).then((plant) => {
       if (plant) {
         console.log("PLANT FOUND");
@@ -189,10 +189,17 @@ function getIDBIdentificationAndPushIntoNetworkDb() {
               plantId,
               identification.plantidentificationid,
               identification.suggestedname,
-              identification.identifiedby
+              identification.identifiedBy
             )
           );
         });
+          Promise.all(saveIdentificationPromises)
+            .then(() =>{
+              console.log("All suggestion saved successfully");
+            })
+            .catch(error => {
+              console.error("Error saving suggestion: ", error);
+            });
       } else {
         console.log("PLANT NOT FOUND IN GET IDB PUSH TO NWK");
       }
