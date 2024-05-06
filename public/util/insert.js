@@ -1,16 +1,19 @@
-
 if ("undefined" === typeof window) {
   importScripts("./util/idb-utility.js");
 }
 
 const readFileAsDataUrl = (file) => {
   return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = () => reject(reader.error);
-      reader.readAsDataURL(file);
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
   });
 };
+
+function isOnline() {
+  return navigator.onLine;
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   const plantForm = document.getElementById("plantForm");
@@ -50,13 +53,15 @@ document.addEventListener("DOMContentLoaded", function () {
     openSyncPlantsIDB().then((db) => {
       // Assuming plantData contains a file object under 'image'
       if (plantData.image) {
-        readFileAsDataUrl(plantData.image).then(dataUrl => {
-          plantData.image = dataUrl;  // Store image as data URL
-          // Now add the plant data to IndexedDB including the image
-          // addNewPlantToSync(syncPlantIDB, plantData);
-        }).catch(error => {
-          console.error("Error processing file:", error);
-        });
+        readFileAsDataUrl(plantData.image)
+          .then((dataUrl) => {
+            plantData.image = dataUrl; // Store image as data URL
+            // Now add the plant data to IndexedDB including the image
+            // addNewPlantToSync(syncPlantIDB, plantData);
+          })
+          .catch((error) => {
+            console.error("Error processing file:", error);
+          });
       }
       addNewPlantToSync(db, plantData)
         .then(() => {
@@ -78,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   const plantSuggestion = document.getElementById("suggestionForm");
-  plantSuggestion.addEventListener("submit", function(event){
+  plantSuggestion.addEventListener("submit", function (event) {
     event.preventDefault();
 
     let modal = document.getElementById("suggestModal");
@@ -91,47 +96,120 @@ document.addEventListener("DOMContentLoaded", function () {
       suggestedName: document.getElementById("suggestion").value,
       identifiedBy: document.getElementById("suggesterUsername").value,
       status: "Not Approved",
-      approved: false
+      approved: false,
     };
+    const plantidentificationID = Math.floor(Math.random() * 10000);
     console.log("Collected suggestion data: ", suggestionFormData);
-    openPlantsIDB().then((db) =>{
-      const plantId = parseInt(suggestionFormData.plantID);
-      console.log("PLANT ID: ", suggestionFormData.plantID);
-      getPlantById(db, plantId)
-        .then((plant) => {
-          if(plant){
+    if (!isOnline) {
+      openPlantsIDB().then((db) => {
+        const plantId = parseInt(suggestionFormData.plantID);
+        console.log("PLANT ID: ", suggestionFormData.plantID);
+        getPlantById(db, plantId).then((plant) => {
+          if (plant) {
             console.log("PLANT FOUND");
-            const plantidentificationID = Math.floor(Math.random() * 10000);
 
             const newIdentification = {
               plantidentificationid: plantidentificationID,
               suggestedname: suggestionFormData.suggestedName,
-              identifiedBy: suggestionFormData.identifiedBy
+              identifiedBy: suggestionFormData.identifiedBy,
             };
 
             plant.identifications.push(newIdentification);
 
-            openSyncPlantsIDB().then((db) =>{
-              const transaction = db.transaction(["sync-plants"], "readwrite");
-              const plantStore = transaction.objectStore("sync-plants");
+            openPlantsIDB().then((db) => {
+              const transaction = db.transaction(["plants"], "readwrite");
+              const plantStore = transaction.objectStore("plants");
               const updateRequest = plantStore.put(plant);
-  
+
               updateRequest.onsuccess = () => {
-                  console.log("Plant data updated successfully.");
+                console.log("Plant data updated successfully.");
               };
-  
+
               updateRequest.onerror = (event) => {
-                  console.error("Error updating plant data:", event.target.error);
+                console.error("Error updating plant data:", event.target.error);
               };
-            })
+            });
             // Update the plant data in IndexedDB
-          }else{
+          } else {
             console.log("PLANT NOT FOUND");
           }
-        })
-    })
+        });
+      });
+    } else {
+      console.log("OJNIJHHHUHH");
+      saveIdentification(
+        suggestionFormData.plantID,
+        plantidentificationID,
+        suggestionFormData.suggestedName,
+        suggestionFormData.identifiedBy
+      );
+    }
   });
+});
 
+function saveIdentification(
+  plantid,
+  identificationId,
+  suggestionTextInput,
+  identifiedBy
+) {
+  let identification = {
+    updateIdentificationId: identificationId,
+    suggestedname: suggestionTextInput,
+    identifiedby: identifiedBy,
+  };
+  console.log("Identification: ", identification);
+  fetch(`http://localhost:5000/api/${plantid}/plantIdentification`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(identification),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Identification Success:", data);
+    })
+    .catch((error) => {
+      console.error("Identification error: ", error);
+    });
+}
+
+function getIDBIdentificationAndPushIntoNetworkDb() {
+  openPlantsIDB.then((db) => {
+    const plantId = parseInt(plantid);
+    console.log("PLANT ID: ", plantId);
+    getPlantById(db, plantId).then((plant) => {
+      if (plant) {
+        console.log("PLANT FOUND");
+        const saveIdentificationPromises = [];
+        plant.identifications.forEach((identification) => {
+          saveIdentificationPromises.push(
+            saveIdentification(
+              identification.plantidentificationid,
+              identification.identifiedby,
+              identification.suggestedname
+            )
+          );
+        });
+
+        Promise.all(saveIdentification)
+          .then(() => {
+            console.log("ALL IDENTIS SAVED");
+          })
+          .catch((error) => {
+            console.error("ERROR SAVING IDENTI", error);
+          });
+      } else {
+        console.log("PLANT NOT FOUND IN GET IDB PUSH TO NWK");
+      }
+    });
+  });
+}
+
+window.addEventListener("online", () => {
+  alert("You are back online. Your suggestion will be synced now.");
+  getIDBIdentificationAndPushIntoNetworkDb();
 });
 
 // You need to ensure functions like `openPlantsIDB` and `addNewPlantToSync` are defined and properly handle the data structure.
