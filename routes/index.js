@@ -3,7 +3,7 @@ var router = express.Router();
 const plantsController = require('../controllers/plantController');
 const multer = require('multer');
 const fs = require('fs');
-const {getSortedPlants, searchPlant} = require("../controllers/plantController");
+const {getSortedPlants} = require("../controllers/plantController");
 
 // const { fetchPlantDetails } = require('../public/util/dbpedia');
 
