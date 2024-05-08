@@ -14,10 +14,14 @@ toggleIcon.addEventListener("click", function () {
   }
 });
 
-const approveSuggestion = document.getElementById("approveSuggestion");
+const approveButtons = document.querySelectorAll(".approve-button");
 
-approveSuggestion.addEventListener("click", function(){
-  console.log("");
+    approveButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const identifiedBy = this.getAttribute("data-identifiedby");
+            console.log("Identified by:", identifiedBy);
+
+  });
 });
 
 });
