@@ -27,9 +27,9 @@ function sortPlants(sortType) {
 
 const insertPlantsInList = (plants) => {
   const plantList = document.getElementById("plant_list");
-  plantList.innerHTML = "";
+  // plantList.innerHTML = "";
 
-  if (plants.plants.length === 0) {
+  if (navigator.onLine && plants.plants.length === 0) {
     console.log("HELLLLOOOO");
     // Create a container div
     const div = document.createElement("div");
