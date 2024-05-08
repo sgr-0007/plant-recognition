@@ -14,5 +14,10 @@ toggleIcon.addEventListener("click", function () {
   }
 });
 
+const approveSuggestion = document.getElementById("approveSuggestion");
+
+approveSuggestion.addEventListener("click", function(){
+  console.log("");
+});
 
 });
