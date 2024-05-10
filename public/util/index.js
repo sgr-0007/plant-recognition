@@ -214,7 +214,11 @@ const insertPlantsInList = (plants) => {
       const plantName = document.createElement("h5");
       plantName.className = "card-title";
       const plantNameLink = document.createElement("a");
-      plantNameLink.href = `/plantdetails/plantdetails?plantid=${plant.plantid}`;
+      if(navigator.onLine){
+        plantNameLink.href = `/plantdetails/plantdetails?plantid=${plant.plantid}`;
+      } else{
+        plantNameLink.setAttribute("disabled", true);
+      }
       plantNameLink.textContent = plant.name;
       plantName.appendChild(plantNameLink);
 
