@@ -1,118 +1,209 @@
-
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plant Details</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link
+      rel="stylesheet"
+      href="/node_modules/bootstrap/dist/css/bootstrap.css"
+    />
+    <link
+      rel="stylesheet"
+      href="/node_modules/bootstrap-icons/font/bootstrap-icons.min.css"
+    />
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="/javascripts/index.js"></script>
+    <script src="/util/chat.js"></script>
+    <script src="/util/idb-utility.js"></script>
+    <script src="/javascripts/plantdetails.js"></script>
+  </head>
 
-<head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Plant Details</title>
-        <link rel="stylesheet" href="/stylesheets/style.css" />
-        <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="/node_modules/bootstrap-icons/font/bootstrap-icons.min.css">
-        <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
-        <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-        <link rel='stylesheet' href='/stylesheets/style.css' />
-        <script src="/javascripts/index.js"></script>
-        <script src="/util/chat.js"></script>
-        <script src="/util/idb-utility.js"></script>
+  <body onload="init()" style="background-color: #e2e2e2">
+    <div class="container" style="margin-top: 20px">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header" style="font-weight: bold">
+              Plant Details
+            </div>
 
+            <div class="card-body" style="padding: 20px">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">Name: <%= plantDetails.name %></li>
+                <li class="list-group-item">
+                  Height: <%= plantDetails.height %> cm
+                </li>
+                <li class="list-group-item">
+                  Spread: <%= plantDetails.spread %> cm
+                </li>
+                <li class="list-group-item">
+                  Has Leaves: <%= plantDetails.has_leaves ? 'Yes' : 'No' %>
+                </li>
+                <li class="list-group-item">
+                  Has Fruits or Seeds: <%= plantDetails.has_fruitsorseeds ?
+                  'Yes' : 'No' %>
+                </li>
+                <li class="list-group-item">
+                  Flower Color: <%= plantDetails.flower_color %>
+                </li>
+                <li class="list-group-item">
+                  Date/Time Seen: <%=
+                  plantDetails.date_time_plant_seen.toLocaleString() %>
+                </li>
+              </ul>
+            </div>
+          </div>
 
+          <div class="card">
+            <div class="card-header" style="font-weight: bold">
+              Plant Details from DB Pedia
+            </div>
 
-
-
-</head>
-
-<body onload="init()" style="background-color: #e2e2e2">
-        <div class="container" style="margin-top: 20px;">
-                <div class="row">
-                        <div class="col-md-6">
-                                <div class="card">
-                                        <div class="card-header" style="font-weight: bold;">
-                                                Plant Details
-                                        </div>
-
-                                        <div class="card-body" style="padding: 20px;">
-                                                <ul class="list-group list-group-flush">
-                                                        <li class="list-group-item">Name: <%= plantDetails.name %>
-                                                        </li>
-                                                        <li class="list-group-item">Height: <%= plantDetails.height %>
-                                                                        cm</li>
-                                                        <li class="list-group-item">Spread: <%= plantDetails.spread %>
-                                                                        cm</li>
-                                                        <li class="list-group-item">Has Leaves: <%=
-                                                                        plantDetails.has_leaves ? 'Yes' : 'No' %>
-                                                        </li>
-                                                        <li class="list-group-item">Has Fruits or Seeds: <%=
-                                                                        plantDetails.has_fruitsorseeds ? 'Yes' : 'No' %>
-                                                        </li>
-                                                        <li class="list-group-item">Flower Color: <%=
-                                                                        plantDetails.flower_color %>
-                                                        </li>
-                                                        <li class="list-group-item">Date/Time Seen: <%=
-                                                                        plantDetails.date_time_plant_seen.toLocaleString()
-                                                                        %>
-                                                        </li>
-                                                </ul>
-                                        </div>
-                                </div>
-
-
-                                <div class="card">
-                                        <div class="card-header" style="font-weight: bold;">
-                                                Plant Details from DB Pedia
-                                        </div>
-
-                                        <div class="card-body" style="padding: 20px;">
-                                                <div class="card-body" style="padding: 20px;">
-                                                        <% if (plantDetailsDB && plantDetailsDB.label && plantDetailsDB.description) { %>
-                                                                <ul class="list-group">
-                                                                        <li class="list-group-item">Name: <%= plantDetailsDB.label %></li>
-                                                                        <li class="list-group-item">Description: <%= plantDetailsDB.description %></li>
-                                                                        <li class="list-group-item">
-                                                                                URL to DBPedia:
-                                                                                <a href="<%= plantDetailsDB.url %>" target="_blank">Visit DBpedia Page</a>
-                                                                        </li>
-                                                                </ul>
-                                                        <% } else { %>
-                                                                <div class="alert alert-warning" role="alert">
-                                                                        Plant details not found.
-                                                                </div>
-                                                        <% } %>
-                                                </div>
-                                        </div>
-                                </div>
-
-                        </div>
-                        <div class="col-md-6">
-                                <div class="card">
-                                        <div class="card-header" style="font-weight: bold;">
-                                                Join the discussion
-
-                                        </div>
-                                        <div class="card-body">
-                                                <div id="who_you_are" style="display: inline"></div>, you are in room:
-                                                <div id="in_room" style="display: inline"></div>
-                                        </div>
-                                        <div id="history" class="boxed"></div>
-                                        <form id="discissionForm" onsubmit="return false;" >
-                                                <div class="form-group">
-                                                        <textarea class="form-control" id="chat_input" name="chat_input"
-                                                                rows="1"></textarea>
-                                                                <button type="button" onclick="sendChatText()" class="btn btn-primary"
-                                                        style="margin-top: 20px; float: right;"> <i class="bi bi-send-fill"></i>
-                                                        Send
-                                                </button>
-                                                </div>
-                                                
-                                        </form>
-                                </div>
-                        </div>
+            <div class="card-body" style="padding: 20px">
+              <div class="card-body" style="padding: 20px">
+                <% if (plantDetailsDB && plantDetailsDB.label &&
+                plantDetailsDB.description) { %>
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    Name: <%= plantDetailsDB.label %>
+                  </li>
+                  <li class="list-group-item">
+                    Description: <%= plantDetailsDB.description %>
+                  </li>
+                  <li class="list-group-item">
+                    URL to DBPedia:
+                    <a href="<%= plantDetailsDB.url %>" target="_blank"
+                      >Visit DBpedia Page</a
+                    >
+                  </li>
+                </ul>
+                <% } else { %>
+                <div class="alert alert-warning" role="alert">
+                  Plant details not found.
                 </div>
+                <% } %>
+              </div>
+            </div>
+          </div>
         </div>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header" style="font-weight: bold">
+              Join the discussion
+            </div>
+            <div class="card-body">
+              <div id="who_you_are" style="display: inline"></div>
+              , you are in room:
+              <div id="in_room" style="display: inline"></div>
+            </div>
+            <div id="history" class="boxed"></div>
+            <form id="discissionForm" onsubmit="return false;">
+              <div class="form-group">
+                <textarea
+                  class="form-control"
+                  id="chat_input"
+                  name="chat_input"
+                  rows="1"
+                ></textarea>
+                <button
+                  type="button"
+                  onclick="sendChatText()"
+                  class="btn btn-primary"
+                  style="margin-top: 20px; float: right"
+                >
+                  <i class="bi bi-send-fill"></i>
+                  Send
+                </button>
+              </div>
+            </form>
+          </div>
+          <!-- Suggestions -->
+          <div class="card">
+            <div
+              class="card-header d-flex justify-content-between align-items-center"
+              style="font-weight: bold"
+            >
+              <span>Suggestions</span>
+              <span id="toggleIcon">
+                <svg
+                  class="w-6 h-6 text-gray-800 dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m19 9-7 7-7-7"
+                  />
+                </svg>
+              </span>
+            </div>
+            <div class="suggestionsBody">
+              <% if(plantDetails.identifications.length === 0) { %>
+              <div class="d-flex justify-content-center align-items-center">
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                <img
+                  src="/images/noidentifications.svg"
+                  alt="No Identifications found"
+                  style="height: 70%; width: 70%"
+                />
+                <h1
+                  class=""
+                  style="
+                    font-family: 'Growing Garden', sans-serif;
+                    font-size: 3em;
+                  "
+                >
+                  No suggestions!
+                </h1>
+                </div>
+              </div>
+              <% } else { %> <%
+              plantDetails.identifications.forEach(identifications=> { %>
+              <ul class="list-group list-group-flush">
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <div class="row">
+                    <span>
+                      Suggested name: <%= identifications.suggestedname %>
+                    </span>
+                    <span
+                      >Identified by: <%= identifications.identifiedby %></span
+                    >
+                  </div>
+                  <div class="col-auto">
+                    <span
+                      ><button
+                        type="button"
+                        class="btn btn-primary approve-button"
+                        style="width: 100px; height: 40px"
+                        id="approveSuggestion"
+                        data-identifiedby = "<%= identifications.identifiedby %>"
+                      >
+                        Approve
+                      </button>
+                    </span>
+                  </div>
+                </li>
+                <% }); %> <% } %>
+              </ul>
+            </div>
+          </div>
         </div>
-</body>
-
-
+      </div>
+    </div>
+  </body>
 </html>

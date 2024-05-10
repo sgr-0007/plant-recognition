@@ -68,3 +68,15 @@ body {
   font-weight: normal;
   font-size: normal;
 }
+
+
+.suggestionsBody{
+  height: 0;
+  overflow: hidden;
+  transition: height 0.3 ease;
+}
+
+.suggestionsBody.expanded{
+  height: auto;
+  overflow: visible;
+}
