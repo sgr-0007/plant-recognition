@@ -203,6 +203,30 @@ exports.postPlantIdentification = async (req, res) => {
   }
 }
 
+
+exports.updatePlantIdentificationStatus = async (req, res) => {
+  const { plantid } = req.params;
+  const plantidentificationStatus = true;
+  try {
+    console.log("PLANT ID: ", plantid); // Corrected variable name
+    console.log("IDENT STATUS: ", true); // Corrected variable name
+    
+    const plant = await Plant.findOneAndUpdate(
+      { plantid: plantid },
+      { $set: { plantIdentificationStatus: plantidentificationStatus } },
+      { new: true }
+    );
+    if (!plant) {
+      return res.status(404).json({ message: "Plant not found" });
+    }
+    return res.status(200).json({ message: "Plant identification status updated successfully", plant });
+  } catch (error) {
+    console.error("Error updating plant identification status:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+
 exports.addComment = async (req, res) => {
   const { plantid } = req.params;
   const { comment, commentedby, updateCommentId } = req.body;

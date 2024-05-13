@@ -108,6 +108,15 @@ router.post('/api/:plantid/plantIdentification', async(req, res)=>{
   }
 });
 
-
+router.post('/api/:plantid/updatePlantIdentificationStatus', async(req, res) => {
+  try {
+    const plantIdentificationStatus = await plantsController.updatePlantIdentificationStatus(req, res);
+    console.log("PLANT IDENT STATUS", plantIdentificationStatus);
+  } catch (error) {
+    console.error('Error updating plant identification status', err);
+    res.render('error', { message: 'Failed to update plant identification status' });
+    res.status(500).render('error', { message: 'Failed to create plant identification status' });
+  }
+});
 
 module.exports = router;

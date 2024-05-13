@@ -56,6 +56,14 @@
                   Date/Time Seen: <%=
                   plantDetails.date_time_plant_seen.toLocaleString() %>
                 </li>
+                <li class="list-group-item">
+                  Identification Status: <%= plantDetails.plantIdentificationStatus ? 'Completed' : 'In-Progress' %>
+                </li>
+                <li class="list-group-item">
+                  <input type="hidden" name="plantid" id="plantidInput" value="<%=
+                  plantDetails.plantid %>">
+                  <button type="button" class="btn btn-primary" onclick="completeIdentification()">Complete identification</button>
+                </li>
               </ul>
             </div>
           </div>

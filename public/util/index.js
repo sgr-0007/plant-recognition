@@ -142,7 +142,11 @@ const insertPlantsInList = (plants) => {
 
       const statusText = document.createElement("p");
       statusText.className = "m-0";
-      statusText.textContent = "Status: Incomplete";
+      if (plant.plantIdentificationStatus) {
+        statusText.textContent = "Status: Completed";
+      } else {
+        statusText.textContent = "Status: In-Progress";
+      }
 
       const detailsLink = document.createElement("a");
       detailsLink.href = `/plantdetails?plantid=${plant.plantid}`;
@@ -243,6 +247,12 @@ const insertPlantsInList = (plants) => {
       const suggestText = document.createElement("p");
       suggestText.className = "m-0";
       suggestText.textContent = "Suggest";
+      suggestText.style.fontWeight = "bold"; // Make the text bold
+
+      if (plant.plantIdentificationStatus){
+        suggestLink.style.pointerEvents = "none";
+        suggestText.style.fontWeight = "normal"; // Make the text bold
+      }
 
       suggestLink.addEventListener("click", function (event) {
         event.preventDefault();
