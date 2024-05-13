@@ -203,6 +203,29 @@ exports.postPlantIdentification = async (req, res) => {
   }
 }
 
+exports.approveSuggestion = async (req, res) => {
+  const { plantid } = req.params;
+  const { suggestedname } = req.body;
+  try {
+    if(!plantid){
+      return res.status(400).json({ error: 'Plant id required' });
+    }
+    console.log("Plant ID for identification: ", plantid);
+    console.log("Plant identification details: ", suggestedname);
+    const plant = await Plant.findOneAndUpdate(
+      { plantid: plantid },
+      { $set: { name: suggestedname } },
+      { new: true }
+    );
+    if(!plant){
+      return res.status(404).json({ message: "Plant not found" });
+    }
+    return res.status(200).json({ message: "Plant identification status updated successfully", plant });
+  } catch (error) {
+    console.error("Error updating suggested name:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
 
 exports.updatePlantIdentificationStatus = async (req, res) => {
   const { plantid } = req.params;

@@ -119,4 +119,13 @@ router.post('/api/:plantid/updatePlantIdentificationStatus', async(req, res) => 
   }
 });
 
+router.post(`/api/:plantid/approvesuggestion`, async(req, res) => {
+  try{
+    const approveSuggestion = await plantsController.approveSuggestion(req, res);
+    console.log("Approved suggestion: ", approveSuggestion);
+  } catch(error) {
+    console.error("Error approving suggestion: ", error);
+  }
+});
+
 module.exports = router;

@@ -13,14 +13,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  const approveButtons = document.querySelectorAll(".approve-button");
-
-  approveButtons.forEach((button) => {
-    button.addEventListener("click", function () {
-      const identifiedBy = this.getAttribute("data-identifiedby");
-      console.log("Identified by:", identifiedBy);
-    });
-  });
 });
 
 function completeIdentification() {
