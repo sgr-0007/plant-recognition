@@ -249,6 +249,31 @@ exports.updatePlantIdentificationStatus = async (req, res) => {
   }
 }
 
+exports.updateNameandDescription = async (req, res) => {
+  const { plantid } = req.params;
+  const { editedname, editeddescription } = req.body;
+  try {
+    if(!plantid){
+      return res.status(400).json({ error: 'Plant id required' });
+    }
+    console.log("Plant ID for updation: ", plantid);
+    console.log("Plant updated name: ", editedname);
+    console.log("Plant updated name: ", editeddescription);
+    const plant = await Plant.findOneAndUpdate(
+      { plantid: plantid },
+      { $set: { name: editedname, description: editeddescription } },
+      { new: true }
+    );
+    if(!plant){
+      return res.status(404).json({ message: "Plant not found" });
+    }
+    return res.status(200).json({ message: "Plant name and description updated successfully", plant });
+  } catch (error) {
+    console.error("Error updating name and description:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 
 exports.addComment = async (req, res) => {
   const { plantid } = req.params;

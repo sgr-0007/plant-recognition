@@ -128,4 +128,13 @@ router.post(`/api/:plantid/approvesuggestion`, async(req, res) => {
   }
 });
 
+router.post(`/api/:plantid/updateNameAndDescription`, async(req, res) => {
+  try{
+    const updateNameAndDescription = await plantsController.updateNameandDescription(req, res);
+    console.log("Updated name and description: ", updateNameAndDescription);
+  }catch(error){
+    console.error("Error updating name and description: ", error );
+  }
+});
+
 module.exports = router;

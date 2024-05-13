@@ -15,6 +15,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+function openEditNameModel(){
+  console.log("CLicked on the modal");
+  const modal = document.getElementById("editNameDescModal");
+  const modalInstance = new bootstrap.Modal(modal);
+  modalInstance.show();
+}
+
 function completeIdentification() {
   if (navigator.onLine) {
     console.log("Clicked complete identification");
