@@ -5,6 +5,7 @@ const plantsController = require('../controllers/plantController');
 router.get('/:plantid', async (req, res) => {
     try {
         const plantDetails = await plantsController.getPlantById(req, res);
+        console.log('router plant details');    
         console.log(plantDetails);    
       } catch (err) {
         console.error('Error while fetching data:', err);
