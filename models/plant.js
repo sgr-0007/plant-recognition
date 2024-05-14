@@ -10,6 +10,7 @@ const plantSchema = new mongoose.Schema({
     longitude: { type: Number },
     createdby: { type: String },
     createddate: { type: Date, default: Date.now },
+    plantIdentificationStatus: { type: Boolean, default: "false" },
 
     // Plant Details
     height: { type: Number },

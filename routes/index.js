@@ -108,6 +108,33 @@ router.post('/api/:plantid/plantIdentification', async(req, res)=>{
   }
 });
 
+router.post('/api/:plantid/updatePlantIdentificationStatus', async(req, res) => {
+  try {
+    const plantIdentificationStatus = await plantsController.updatePlantIdentificationStatus(req, res);
+    console.log("PLANT IDENT STATUS", plantIdentificationStatus);
+  } catch (error) {
+    console.error('Error updating plant identification status', err);
+    res.render('error', { message: 'Failed to update plant identification status' });
+    res.status(500).render('error', { message: 'Failed to create plant identification status' });
+  }
+});
 
+router.post(`/api/:plantid/approvesuggestion`, async(req, res) => {
+  try{
+    const approveSuggestion = await plantsController.approveSuggestion(req, res);
+    console.log("Approved suggestion: ", approveSuggestion);
+  } catch(error) {
+    console.error("Error approving suggestion: ", error);
+  }
+});
+
+router.post(`/api/:plantid/updateNameAndDescription`, async(req, res) => {
+  try{
+    const updateNameAndDescription = await plantsController.updateNameandDescription(req, res);
+    console.log("Updated name and description: ", updateNameAndDescription);
+  }catch(error){
+    console.error("Error updating name and description: ", error );
+  }
+});
 
 module.exports = router;
