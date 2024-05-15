@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
           position.coords.latitude;
         document.getElementById("longitudeInput").value =
           position.coords.longitude;
-        alert("Location retrieved successfully.");
+        // alert("Location retrieved successfully.");
         // document.getElementById("plantForm").submit(); // Automatically submit the form
       } catch (error) {
         console.error("Error retrieving location:", error);
