@@ -137,4 +137,14 @@ router.post(`/api/:plantid/updateNameAndDescription`, async(req, res) => {
   }
 });
 
+// Add this route to handle likes
+router.post('/api/plants/:plantid/like', async (req, res) => {
+  try {
+      await plantsController.likePlant(req, res);
+  } catch (err) {
+      console.error('Error while liking the plant:', err);
+      res.status(500).render('error', { message: 'Failed to like the plant' });
+  }
+})
+
 module.exports = router;

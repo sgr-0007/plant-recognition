@@ -1,6 +1,28 @@
 let plantsData = { plants: [] }; // Global variable to store plant data
 
+// Function to search plants by name
+function searchPlants() {
+  // console.log("seach plants is clicked")
+  clearPlantsInList();
+  const searchQuery = document.getElementById('searchBar').value.trim().toLowerCase();
+  console.log(searchQuery)
+  if (searchQuery) {
+
+    // Now filter the plants based on the search query and log the filtered results
+    const filteredPlants = plantsData.plants.filter(plant => {
+      const plantName = plant.name.toLowerCase();
+      const isMatch = plantName.includes(searchQuery.toLowerCase());
+      // console.log(`Checking plant: ${plantName}, Search query: ${searchQuery}, Match: ${isMatch}`);
+      return isMatch;
+    });
+    insertPlantsInList({ plants: filteredPlants });
+  } else {
+    clearPlantsInList();
+  }
+}
+
 function sortPlants(sortType) {
+  clearPlantsInList();
   let sortedPlants = [...plantsData.plants];
   switch (sortType) {
     case "newest":
@@ -24,6 +46,73 @@ function sortPlants(sortType) {
 
   insertPlantsInList(plantsData); // Re-render the plant list
 }
+
+const clearPlantsInList = () => {
+  const plantList = document.getElementById("plant_list");
+  // plantList.innerHTML = "";
+
+  // if (navigator.onLine && plants.plants.length === 0) {
+  console.log("HELLLLOOOO");
+  // Create a container div
+  const div = document.createElement("div");
+  div.style.position = "fixed";
+  div.style.top = "50px";
+  div.style.left = "0";
+  div.style.right = "0";
+  div.style.bottom = "0";
+  div.style.overflow = "hidden";
+  div.style.display = "grid";
+  div.style.placeItems = "center";
+  div.style.height = "100vh";
+  div.style.margin = "0";
+  div.style.padding = "0";
+
+  // Create a nested flex container
+  const flexContainer = document.createElement("div");
+  flexContainer.style.display = "flex";
+  flexContainer.style.flexDirection = "column";
+  flexContainer.style.alignItems = "center";
+  flexContainer.style.textAlign = "center";
+  flexContainer.style.margin = "0";
+  flexContainer.style.padding = "0";
+
+  // Create and append the image
+  const img = document.createElement("img");
+  img.src = "images/Drought.svg";
+  img.alt = "Drought Images";
+  img.style.width = "35vw";
+  img.style.height = "auto";
+  img.style.maxWidth = "75%";
+  img.style.margin = "0";
+  img.style.padding = "0";
+  flexContainer.appendChild(img);
+
+  // Create and append the main heading
+  const mainHeading = document.createElement("h1");
+  mainHeading.style.fontFamily = "'Growing Garden', sans-serif";
+  mainHeading.style.fontSize = "5em";
+  mainHeading.style.margin = "0";
+  mainHeading.style.padding = "0";
+  mainHeading.textContent = "No plants found!";
+  flexContainer.appendChild(mainHeading);
+
+  // Create and append the subheading
+  const subHeading = document.createElement("h3");
+  subHeading.style.fontFamily = "'Growing Garden', sans-serif";
+  subHeading.style.fontSize = "3em";
+  subHeading.style.margin = "0";
+  subHeading.style.padding = "0";
+  subHeading.textContent = "Go find some plants!";
+  flexContainer.appendChild(subHeading);
+
+  // Append the nested flex container to the container div
+  div.appendChild(flexContainer);
+
+  // Append the container div to the plant list
+  // plantList.appendChild(div);
+  plantList.innerHTML = '';
+}
+// }
 
 const insertPlantsInList = (plants) => {
   const plantList = document.getElementById("plant_list");
@@ -218,9 +307,55 @@ const insertPlantsInList = (plants) => {
       const plantName = document.createElement("h5");
       plantName.className = "card-title";
       const plantNameLink = document.createElement("a");
-      if(navigator.onLine){
+
+      //add like functionality
+      // Add the like button
+      const likeButton = document.createElement("button");
+      likeButton.className = "like-button";
+      likeButton.setAttribute("data-plantid", plant.plantid);
+
+      // Add the SVG for the like button
+      const likeIcon = new DOMParser().parseFromString(`
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bi bi-heart">
+    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+  </svg>
+`, 'image/svg+xml').documentElement;
+
+
+      likeButton.appendChild(likeIcon);
+
+      // Add the like count display
+      const likeCount = document.createElement("span");
+      likeCount.className = "like-count ms-2";
+      likeCount.textContent = `${plant.likes || 0} Likes`;
+
+      // Add event listener for the like button
+      likeButton.addEventListener("click", function () {
+        const plantId = this.getAttribute("data-plantid");
+
+        fetch(`/api/plants/${plantId}/like`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.message === 'Plant liked successfully') {
+              const currentLikes = parseInt(likeCount.textContent) || 0;
+              likeCount.textContent = `${currentLikes + 1} Likes`;
+              likeButton.classList.toggle('liked');
+            } else {
+              console.error('Failed to like the plant');
+            }
+          })
+          .catch(error => console.error('Error:', error));
+      });
+
+
+      if (navigator.onLine) {
         plantNameLink.href = `/plantdetails/plantdetails?plantid=${plant.plantid}`;
-      } else{
+      } else {
         plantNameLink.setAttribute("disabled", true);
       }
       plantNameLink.textContent = plant.name;
@@ -233,6 +368,10 @@ const insertPlantsInList = (plants) => {
       // Append plant name and description to the container
       titleDescContainer.appendChild(plantName);
       titleDescContainer.appendChild(plantDesc);
+      if (navigator.onLine) {
+        titleDescContainer.appendChild(likeButton);
+        titleDescContainer.appendChild(likeCount);
+      }
 
       // Create the suggestion section
       const suggestionSection = document.createElement("div");
@@ -249,7 +388,7 @@ const insertPlantsInList = (plants) => {
       suggestText.textContent = "Suggest";
       suggestText.style.fontWeight = "bold"; // Make the text bold
 
-      if (plant.plantIdentificationStatus){
+      if (plant.plantIdentificationStatus) {
         suggestLink.style.pointerEvents = "none";
         suggestText.style.fontWeight = "normal"; // Make the text bold
       }

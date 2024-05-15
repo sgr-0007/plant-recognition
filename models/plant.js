@@ -35,7 +35,10 @@ const plantSchema = new mongoose.Schema({
         identifiedby: { type: String },
         status: { type: String, default: "Not Approved" },
         approved: { type: Boolean, default: false }
-    }]
+    }],
+
+    // Add the likes field
+    likes: { type: Number, default: 0 }
 });
 
 // Pre-save hook to auto-increment commentid and plantidentificationid

@@ -332,4 +332,46 @@ exports.getComments = async (req, res) => {
   }
 }
 
+// Add this function
+// Function to get a plant by its ID from the database
+const getPlantByIdFromDB = async (plantId) => {
+  try {
+      const plant = await Plant.findOne({ plantid: plantId });
+      return plant;
+  } catch (err) {
+      console.error('Error fetching plant by ID:', err);
+      throw err;
+  }
+};
+
+// Function to update a plant in the database
+const updatePlantInDB = async (plant) => {
+  try {
+      await plant.save();
+  } catch (err) {
+      console.error('Error updating plant:', err);
+      throw err;
+  }
+};
+
+// Function to handle liking a plant
+exports.likePlant = async (req, res) => {
+  const plantId = req.params.plantid;
+  try {
+      const plant = await getPlantByIdFromDB(plantId);
+      if (!plant) {
+          return res.status(404).send({ message: 'Plant not found' });
+      }
+
+      plant.likes = (plant.likes || 0) + 1; // Increment the like count
+
+      await updatePlantInDB(plant); // Save the updated plant
+
+      res.status(200).send({ message: 'Plant liked successfully', likes: plant.likes });
+  } catch (err) {
+      console.error('Error while liking the plant:', err);
+      res.status(500).send({ message: 'Failed to like the plant' });
+  }
+};
+
 
