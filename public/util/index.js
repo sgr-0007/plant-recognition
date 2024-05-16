@@ -18,6 +18,7 @@ function searchPlants() {
     insertPlantsInList({ plants: filteredPlants });
   } else {
     clearPlantsInList();
+    insertPlantsInList(plantsData);
   }
 }
 
@@ -330,27 +331,28 @@ const insertPlantsInList = (plants) => {
       likeCount.textContent = `${plant.likes || 0} Likes`;
 
       // Add event listener for the like button
-      likeButton.addEventListener("click", function () {
-        const plantId = this.getAttribute("data-plantid");
+    likeButton.addEventListener("click", function () {
+      const plantId = this.getAttribute("data-plantid");
 
-        fetch(`/api/plants/${plantId}/like`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-          .then(response => response.json())
-          .then(data => {
-            if (data.message === 'Plant liked successfully') {
-              const currentLikes = parseInt(likeCount.textContent) || 0;
-              likeCount.textContent = `${currentLikes + 1} Likes`;
-              likeButton.classList.toggle('liked');
-            } else {
-              console.error('Failed to like the plant');
-            }
-          })
-          .catch(error => console.error('Error:', error));
-      });
+      fetch(`/api/plants/${plantId}/like`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === 'Plant liked successfully') {
+          const currentLikes = parseInt(likeCount.textContent) || 0;
+          likeCount.textContent = `${currentLikes + 1} Likes`;
+          likeButton.classList.add('liked');
+          likeButton.disabled = true; // Disable the button after clicking
+        } else {
+          console.error('Failed to like the plant');
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    });
 
 
       if (navigator.onLine) {
