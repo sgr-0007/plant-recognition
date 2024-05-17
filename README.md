@@ -12,7 +12,7 @@ This progressive web application allows users to record and view plant sightings
 
 ### Setup Instructions
 
-1. **Navigate to the Project's root directory (solution):**
+1. **Navigate to the Project's root directory (Team_Msc06/solution/):**
 
 2. **Install Dependencies:**
    ```bash
