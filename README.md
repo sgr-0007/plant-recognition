@@ -12,15 +12,9 @@ This progressive web application allows users to record and view plant sightings
 
 ### Setup Instructions
 
-1. **Clone the project:**
-git clone <projecturl>
+1. **Navigate to the Project's root directory (solution):**
 
-2. **Navigate to the Project Directory:**
-   ```bash
-   cd plant-recognition
-   ```
-
-3. **Install Dependencies:**
+2. **Install Dependencies:**
    ```bash
    npm install
    ```
