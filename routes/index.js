@@ -5,17 +5,11 @@ const multer = require('multer');
 const fs = require('fs');
 const {getSortedPlants, searchPlant} = require("../controllers/plantController");
 
-// const { fetchPlantDetails } = require('../public/util/dbpedia');
-
-
-
-// const upload = multe;
-
+// Configure multer for file storage
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     var directory = 'public/images_dynamic/uploads/';
     fs.access(directory, function(error){
-      // If directory is not already created
       if(error){
         fs.mkdir(directory, { recursive: true }, function(error){
           if(error){
@@ -26,7 +20,6 @@ var storage = multer.diskStorage({
           }
         });
       } else{
-        //Directory already exists
         cb(null, directory);
       }
     });
@@ -34,19 +27,20 @@ var storage = multer.diskStorage({
   filename: function (req, file, cb) {
     var original = file.originalname;
     var file_extension = original.split(".");
-    // Make the file name the date + the file extension
     filename =  Date.now() + '.' + file_extension[file_extension.length-1];
     console.log(filename);
     cb(null, filename);
   }
 });
 
-// Initialize multer with the defined storage
 const upload = multer({ storage: storage });
 
+/**
+ * Route to render the homepage.
+ * @route GET /
+ */
 router.get('/', async (req, res) => {
   try {
-    // const plants = await plantsController.getAllPlantsHomepage(req, res);
     var plants = []
     res.render('index', { plants });
   } catch (err) {
@@ -55,15 +49,13 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Assuming Express is already set up and running
-
-// Dynamic plant details route
-
-
-/* GET home page. */
+/**
+ * Route to get all plants.
+ * @route GET /api/plants
+ */
 router.get('/api/plants', async (req, res) => {
   try {
-    // Mimicking the structure of an Express middleware using controllers
+
     await plantsController.getAllPlants(req, res);
   } catch (err) {
     console.error('Error while fetching data:', err);
@@ -71,12 +63,21 @@ router.get('/api/plants', async (req, res) => {
   }
 });
 
+/**
+ * Route to get sorted plants.
+ * @route GET /api/plants/sorted
+ */
 router.get('/api/plants/sorted', getSortedPlants);
 
 
+/**
+ * Route to get plant details by plant ID.
+ * @route GET /api/plant
+ * @query {string} plantid - The ID of the plant to fetch details for.
+ */
 router.get('/api/plant', async (req, res) => {
   const plantid = req.query.plantid;
-  req.params.plantid = plantid;  // Setting up params as it is used by the controller method
+  req.params.plantid = plantid; 
   try {
     await plantsController.getPlantById(req, res);
   } catch (err) {
@@ -85,11 +86,13 @@ router.get('/api/plant', async (req, res) => {
   }
 });
 
-// POST route for creating a new plant
+/**
+ * Route to create a new plant.
+ * @route POST /api/plantCreate
+ */
 router.post('/api/plantCreate', upload.single('image'), async (req, res) => {
   try {
-    // console.log(req.body);  // Log text data
-    // console.log(req.file);  // Log file data
+
     await plantsController.createPlant(req, res);
   } catch (err) {
     console.error('Error while creating plant:', err);
@@ -97,7 +100,10 @@ router.post('/api/plantCreate', upload.single('image'), async (req, res) => {
   }
 });
 
-// POST route for adding plant identification to the plantid
+/**
+ * Route to add a plant identification suggestion.
+ * @route POST /api/:plantid/plantIdentification
+ */
 router.post('/api/:plantid/plantIdentification', async(req, res)=>{
   try {
     const plantIdentification = await plantsController.postPlantIdentification(req, res);
@@ -108,6 +114,10 @@ router.post('/api/:plantid/plantIdentification', async(req, res)=>{
   }
 });
 
+/**
+ * Route to update the plant identification status.
+ * @route POST /api/:plantid/updatePlantIdentificationStatus
+ */
 router.post('/api/:plantid/updatePlantIdentificationStatus', async(req, res) => {
   try {
     const plantIdentificationStatus = await plantsController.updatePlantIdentificationStatus(req, res);
@@ -119,6 +129,10 @@ router.post('/api/:plantid/updatePlantIdentificationStatus', async(req, res) => 
   }
 });
 
+/**
+ * Route to approve a plant identification suggestion.
+ * @route POST /api/:plantid/approvesuggestion
+ */
 router.post(`/api/:plantid/approvesuggestion`, async(req, res) => {
   try{
     const approveSuggestion = await plantsController.approveSuggestion(req, res);
@@ -128,6 +142,10 @@ router.post(`/api/:plantid/approvesuggestion`, async(req, res) => {
   }
 });
 
+/**
+ * Route to update the name and description of a plant.
+ * @route POST /api/:plantid/updateNameAndDescription
+ */
 router.post(`/api/:plantid/updateNameAndDescription`, async(req, res) => {
   try{
     const updateNameAndDescription = await plantsController.updateNameandDescription(req, res);
@@ -137,7 +155,10 @@ router.post(`/api/:plantid/updateNameAndDescription`, async(req, res) => {
   }
 });
 
-// Add this route to handle likes
+/**
+ * Route to like a plant.
+ * @route POST /api/plants/:plantid/like
+ */
 router.post('/api/plants/:plantid/like', async (req, res) => {
   try {
       await plantsController.likePlant(req, res);

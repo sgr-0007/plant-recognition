@@ -1,7 +1,14 @@
+// Import IndexedDB utility if running in a worker environment
+
 if ("undefined" === typeof window) {
   importScripts("./util/idb-utility.js");
 }
 
+/**
+ * Reads a file as a Data URL.
+ * @param {File} file - The file to be read.
+ * @returns {Promise<string>} - A promise that resolves with the file data as a Data URL.
+ */
 const readFileAsDataUrl = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -17,20 +24,14 @@ document.addEventListener("DOMContentLoaded", function () {
   const plantForm = document.getElementById("plantForm");
 
   plantForm.addEventListener("submit", function (event) {
-    event.preventDefault(); // Prevent the default form submission via HTTP
-
-    //This closes the new post modal
+    event.preventDefault();
     let modal = document.getElementById("newPostModal");
     let modalInstance = bootstrap.Modal.getInstance(modal);
     modalInstance.hide();
-
-    // Refresh the page
     location.reload();
-
-    // Gather data from the form
     const plantData = {
       name: document.getElementById("nameOfPlant").value,
-      image: document.getElementById("fileInput").files[0], // This will only handle the file as Blob locally
+      image: document.getElementById("fileInput").files[0], // This will handle the file as Blob locally
       createdby: document.getElementById("userNickname").value,
       dateTimeSeen: document.getElementById("dateTimePickerInput").value,
       description: document.getElementById("plantDescription").value,
@@ -40,22 +41,17 @@ document.addEventListener("DOMContentLoaded", function () {
       hasLeaves: document.getElementById("leavesSwitch").checked,
       hasFruitsOrSeeds: document.getElementById("fruitSeeds").checked,
       flowerColor: document.getElementById("flowerColor").value,
-      latitude: document.getElementById("latitudeInput").value, // Assume these are filled by some other mechanism (like GPS)
+      latitude: document.getElementById("latitudeInput").value,
       longitude: document.getElementById("longitudeInput").value,
     };
 
-    // Debug print to console
     console.log("Collected Plant Data:", plantData);
 
-    // Open IndexedDB and add new plant to sync
     openSyncPlantsIDB().then((db) => {
-      // Assuming plantData contains a file object under 'image'
       if (plantData.image) {
         readFileAsDataUrl(plantData.image)
           .then((dataUrl) => {
-            plantData.image = dataUrl; // Store image as data URL
-            // Now add the plant data to IndexedDB including the image
-            // addNewPlantToSync(syncPlantIDB, plantData);
+            plantData.image = dataUrl;
           })
           .catch((error) => {
             console.error("Error processing file:", error);
@@ -63,8 +59,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       addNewPlantToSync(db, plantData)
         .then(() => {
-          // Close the modal
-          // Notify user via service worker
           navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
             serviceWorkerRegistration
               .showNotification("Plant App", {
@@ -87,8 +81,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let modal = document.getElementById("suggestModal");
     let modalInstance = bootstrap.Modal.getInstance(modal);
     modalInstance.hide();
-
-    // Gather data from the suggestion form
     const suggestionFormData = {
       plantID: document.getElementById("plantIDInput").value,
       suggestedName: document.getElementById("suggestion").value,
@@ -130,13 +122,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.error("Error updating plant data:", event.target.error);
               };
             });
-            // Update the plant data in IndexedDB
           } else {
             console.log("PLANT NOT FOUND");
           }
         });
       });
-    } else if(navigator.onLine) {
+    } else if (navigator.onLine) {
       console.log("Online mode. Saving suggestion to network DB.");
       saveIdentification(
         suggestionFormData.plantID,
@@ -148,6 +139,13 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+/**
+ * Saves the identification suggestion to the online database.
+ * @param {string} plantid - The ID of the plant.
+ * @param {number} identificationID - The ID of the identification.
+ * @param {string} suggestionTextInput - The suggested name.
+ * @param {string} identifiedBy - The user who suggested the name.
+ */
 function saveIdentification(
   plantid,
   identificationID,
@@ -176,6 +174,9 @@ function saveIdentification(
     });
 }
 
+/**
+ * Retrieves identification suggestions from IndexedDB and pushes them to the online database.
+ */
 function getIDBIdentificationAndPushIntoNetworkDb() {
   openPlantsIDB().then((db) => {
     const plantId = parseInt(plantID);
@@ -193,13 +194,13 @@ function getIDBIdentificationAndPushIntoNetworkDb() {
             )
           );
         });
-          Promise.all(saveIdentificationPromises)
-            .then(() =>{
-              console.log("All suggestion saved successfully");
-            })
-            .catch(error => {
-              console.error("Error saving suggestion: ", error);
-            });
+        Promise.all(saveIdentificationPromises)
+          .then(() => {
+            console.log("All suggestion saved successfully");
+          })
+          .catch(error => {
+            console.error("Error saving suggestion: ", error);
+          });
       } else {
         console.log("PLANT NOT FOUND IN GET IDB PUSH TO NWK");
       }
@@ -207,9 +208,9 @@ function getIDBIdentificationAndPushIntoNetworkDb() {
   });
 }
 
+// Event listener for when the system comes back online
 window.addEventListener("online", () => {
   alert("You are back online. Your suggestion will be synced now.");
   getIDBIdentificationAndPushIntoNetworkDb();
 });
 
-// You need to ensure functions like `openPlantsIDB` and `addNewPlantToSync` are defined and properly handle the data structure.

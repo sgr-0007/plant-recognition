@@ -37,7 +37,6 @@ const plantSchema = new mongoose.Schema({
         approved: { type: Boolean, default: false }
     }],
 
-    // Add the likes field
     likes: { type: Number, default: 0 }
 });
 

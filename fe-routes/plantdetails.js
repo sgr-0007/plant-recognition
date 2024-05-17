@@ -3,15 +3,24 @@ const {searchPlant} = require("../controllers/plantController");
 var router = express.Router();
 
 
+// Function to capitalize the first letter of a string
 function capitalizeFirstLetter(string) {
     if (string.length === 0) {
-        return ''; // Return an empty string if the input is empty
+        return ''; 
     }
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 }
 
+/**
+ * Route for searching dbpedia details.
+ */
 router.get('/dbsearch', searchPlant);
 
+/**
+ * Route for fetching plant details and related database information.
+ * @route GET /plantdetails
+ * @queryParam {string} plantid - The ID of the plant to fetch details for.
+ */
 router.get('/plantdetails', async (req, res) => {
     const plantid = req.query.plantid;
     console.log(plantid);

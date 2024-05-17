@@ -1,8 +1,8 @@
-let plantsData = { plants: [] }; // Global variable to store plant data
+// Global variable to store plant data
+let plantsData = { plants: [] }; 
 
 // Function to search plants by name
 function searchPlants() {
-  // console.log("seach plants is clicked")
   clearPlantsInList();
   const searchQuery = document.getElementById('searchBar').value.trim().toLowerCase();
   console.log(searchQuery)
@@ -12,7 +12,6 @@ function searchPlants() {
     const filteredPlants = plantsData.plants.filter(plant => {
       const plantName = plant.name.toLowerCase();
       const isMatch = plantName.includes(searchQuery.toLowerCase());
-      // console.log(`Checking plant: ${plantName}, Search query: ${searchQuery}, Match: ${isMatch}`);
       return isMatch;
     });
     insertPlantsInList({ plants: filteredPlants });
@@ -50,11 +49,6 @@ function sortPlants(sortType) {
 
 const clearPlantsInList = () => {
   const plantList = document.getElementById("plant_list");
-  // plantList.innerHTML = "";
-
-  // if (navigator.onLine && plants.plants.length === 0) {
-  console.log("HELLLLOOOO");
-  // Create a container div
   const div = document.createElement("div");
   div.style.position = "fixed";
   div.style.top = "50px";
@@ -68,7 +62,6 @@ const clearPlantsInList = () => {
   div.style.margin = "0";
   div.style.padding = "0";
 
-  // Create a nested flex container
   const flexContainer = document.createElement("div");
   flexContainer.style.display = "flex";
   flexContainer.style.flexDirection = "column";
@@ -77,7 +70,6 @@ const clearPlantsInList = () => {
   flexContainer.style.margin = "0";
   flexContainer.style.padding = "0";
 
-  // Create and append the image
   const img = document.createElement("img");
   img.src = "images/Drought.svg";
   img.alt = "Drought Images";
@@ -88,7 +80,6 @@ const clearPlantsInList = () => {
   img.style.padding = "0";
   flexContainer.appendChild(img);
 
-  // Create and append the main heading
   const mainHeading = document.createElement("h1");
   mainHeading.style.fontFamily = "'Growing Garden', sans-serif";
   mainHeading.style.fontSize = "5em";
@@ -97,7 +88,6 @@ const clearPlantsInList = () => {
   mainHeading.textContent = "No plants found!";
   flexContainer.appendChild(mainHeading);
 
-  // Create and append the subheading
   const subHeading = document.createElement("h3");
   subHeading.style.fontFamily = "'Growing Garden', sans-serif";
   subHeading.style.fontSize = "3em";
@@ -106,22 +96,16 @@ const clearPlantsInList = () => {
   subHeading.textContent = "Go find some plants!";
   flexContainer.appendChild(subHeading);
 
-  // Append the nested flex container to the container div
   div.appendChild(flexContainer);
 
-  // Append the container div to the plant list
-  // plantList.appendChild(div);
   plantList.innerHTML = '';
 }
 // }
 
 const insertPlantsInList = (plants) => {
   const plantList = document.getElementById("plant_list");
-  // plantList.innerHTML = "";
 
   if (navigator.onLine && plants.plants.length === 0) {
-    console.log("HELLLLOOOO");
-    // Create a container div
     const div = document.createElement("div");
     div.style.position = "fixed";
     div.style.top = "50px";
@@ -135,7 +119,6 @@ const insertPlantsInList = (plants) => {
     div.style.margin = "0";
     div.style.padding = "0";
 
-    // Create a nested flex container
     const flexContainer = document.createElement("div");
     flexContainer.style.display = "flex";
     flexContainer.style.flexDirection = "column";
@@ -144,7 +127,6 @@ const insertPlantsInList = (plants) => {
     flexContainer.style.margin = "0";
     flexContainer.style.padding = "0";
 
-    // Create and append the image
     const img = document.createElement("img");
     img.src = "images/Drought.svg";
     img.alt = "Drought Images";
@@ -155,7 +137,6 @@ const insertPlantsInList = (plants) => {
     img.style.padding = "0";
     flexContainer.appendChild(img);
 
-    // Create and append the main heading
     const mainHeading = document.createElement("h1");
     mainHeading.style.fontFamily = "'Growing Garden', sans-serif";
     mainHeading.style.fontSize = "5em";
@@ -164,7 +145,6 @@ const insertPlantsInList = (plants) => {
     mainHeading.textContent = "No plants found!";
     flexContainer.appendChild(mainHeading);
 
-    // Create and append the subheading
     const subHeading = document.createElement("h3");
     subHeading.style.fontFamily = "'Growing Garden', sans-serif";
     subHeading.style.fontSize = "3em";
@@ -173,19 +153,15 @@ const insertPlantsInList = (plants) => {
     subHeading.textContent = "Go find some plants!";
     flexContainer.appendChild(subHeading);
 
-    // Append the nested flex container to the container div
     div.appendChild(flexContainer);
 
-    // Append the container div to the plant list
     plantList.appendChild(div);
   } else {
     plants.plants.forEach((plant) => {
-      // Create the card div
       const card = document.createElement("div");
       card.className = "card my-1";
       card.style.width = "60%";
 
-      // Create the card header
       const cardHeader = document.createElement("div");
       cardHeader.className = "card-header";
 
@@ -193,31 +169,22 @@ const insertPlantsInList = (plants) => {
       headerContent.className =
         "d-flex justify-content-between align-items-center";
 
-      // Creator info
       const creatorDiv = document.createElement("div");
       creatorDiv.className = "d-flex align-items-center";
 
       const svgData =
         '<?xml version="1.0" ?><svg style="enable-background:new 0 0 24 24;" version="1.1" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="info"/><g id="icons"><g id="user"><ellipse cx="12" cy="8" rx="5" ry="6"/><path d="M21.8,19.1c-0.9-1.8-2.6-3.3-4.8-4.2c-0.6-0.2-1.3-0.2-1.8,0.1c-1,0.6-2,0.9-3.2,0.9s-2.2-0.3-3.2-0.9C8.3,14.8,7.6,14.7,7,15c-2.2,0.9-3.9,2.4-4.8,4.2C1.5,20.5,2.6,22,4.1,22h15.8C21.4,22,22.5,20.5,21.8,19.1z"/></g></g></svg>';
 
-      // Create the SVG element
       const creatorIcon = new DOMParser().parseFromString(
         svgData,
         "image/svg+xml"
       ).documentElement;
 
-      // Set attributes if necessary
       creatorIcon.setAttribute("width", "30");
       creatorIcon.setAttribute("height", "30");
       creatorIcon.setAttribute("fill", "currentColor");
 
-      // Append the SVG to the DOM or use it as needed
       document.body.appendChild(creatorIcon);
-
-      //hasflowers = plants.hasFLowers = true/false
-      // const hasflowers = document.createElement("p");
-      // creatorName.className = "m-0 mx-2";
-      // creatorName.textContent = plant.hasflowers;
 
       const creatorName = document.createElement("p");
       creatorName.className = "m-0 mx-2";
@@ -226,7 +193,6 @@ const insertPlantsInList = (plants) => {
       creatorDiv.appendChild(creatorIcon);
       creatorDiv.appendChild(creatorName);
 
-      // Status and details link
       const statusDiv = document.createElement("div");
       statusDiv.className = "d-flex align-items-center";
 
@@ -266,19 +232,10 @@ const insertPlantsInList = (plants) => {
       createdDateText.className = "card-text";
       createdDateText.textContent = `Created on: ${date.toLocaleDateString()}`;
 
-      // Plant image
       const img = document.createElement("img");
       img.className = "card-img-top";
       img.alt = "Plant image";
-      // img.src = plant.image ? plant.image : "placeholder-image.jpg";
-      // card.appendChild(img);
-
-      // const img = document.createElement("img");
-      // img.className = "card-img-top";
-      // img.alt = "Plant image";
-      // img.src = plant.image; // Directly use the data URL stored in IndexedDB
-
-      // Assume `plant.image` is retrieved as a Blob from IndexedDB
+     
       if (plant.image instanceof Blob) {
         console.log("plant image is Blob");
         img.src = URL.createObjectURL(plant.image);
@@ -293,29 +250,22 @@ const insertPlantsInList = (plants) => {
 
       card.appendChild(img);
 
-      // Card body with plant name and description
-      // Create the main card body
       const cardBody = document.createElement("div");
       cardBody.className = "card-body";
       cardBody.style.display = "flex";
       cardBody.style.justifyContent = "space-between";
 
-      // Create a container for the title and description
       const titleDescContainer = document.createElement("div");
       titleDescContainer.style.flex = "1";
 
-      // Create elements for plant name and description
       const plantName = document.createElement("h5");
       plantName.className = "card-title";
       const plantNameLink = document.createElement("a");
 
-      //add like functionality
-      // Add the like button
       const likeButton = document.createElement("button");
       likeButton.className = "like-button";
       likeButton.setAttribute("data-plantid", plant.plantid);
 
-      // Add the SVG for the like button
       const likeIcon = new DOMParser().parseFromString(`
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bi bi-heart">
     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
@@ -325,12 +275,10 @@ const insertPlantsInList = (plants) => {
 
       likeButton.appendChild(likeIcon);
 
-      // Add the like count display
       const likeCount = document.createElement("span");
       likeCount.className = "like-count ms-2";
       likeCount.textContent = `${plant.likes || 0} Likes`;
 
-      // Add event listener for the like button
     likeButton.addEventListener("click", function () {
       const plantId = this.getAttribute("data-plantid");
 
@@ -375,12 +323,10 @@ const insertPlantsInList = (plants) => {
         titleDescContainer.appendChild(likeCount);
       }
 
-      // Create the suggestion section
       const suggestionSection = document.createElement("div");
       suggestionSection.style.display = "flex";
       suggestionSection.style.alignItems = "center";
       suggestionSection.style.justifyContent = "center";
-      // Create the suggest link
       const suggestLink = document.createElement("a");
       suggestLink.href = "";
       suggestLink.className = "text-decoration-none text-body-secondary";
@@ -388,11 +334,11 @@ const insertPlantsInList = (plants) => {
       const suggestText = document.createElement("p");
       suggestText.className = "m-0";
       suggestText.textContent = "Suggest";
-      suggestText.style.fontWeight = "bold"; // Make the text bold
+      suggestText.style.fontWeight = "bold";
 
       if (plant.plantIdentificationStatus) {
         suggestLink.style.pointerEvents = "none";
-        suggestText.style.fontWeight = "normal"; // Make the text bold
+        suggestText.style.fontWeight = "normal"; 
       }
 
       suggestLink.addEventListener("click", function (event) {
@@ -534,18 +480,14 @@ window.onload = function () {
     console.log("Offline mode");
     openPlantsIDB().then((db) => {
       getAllPlantsOffline(db).then((plants) => {
-        // for (const plant of plants) {
         insertPlantsInList(plants);
-        // }
       });
     });
 
     console.log("Add plants from SYNC IDB");
     openSyncPlantsIDB().then((db) => {
       getAllSyncPlantsOffline(db).then((plants) => {
-        // for (const plant of plants) {
         insertPlantsInList(plants);
-        // }
       });
     });
   }

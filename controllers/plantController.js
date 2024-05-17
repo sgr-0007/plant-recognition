@@ -1,38 +1,30 @@
 const Plant = require("../models/plant");
 
+/**
+ * Create a new plant.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 exports.createPlant = async (req, res) => {
-  // console.log("Received form data:", req.body);  // Should now log correct data
-  // console.log("Received file:", req.file);      // Should log file info
-
-  // console.log('plant controller')
   const {
     name, 
-    dateTimeSeen: date_time_plant_seen, // Map the correct property to your variable
+    dateTimeSeen: date_time_plant_seen, 
     description, 
     createdby,
     latitude, 
     longitude, 
     height, 
     spread, 
-    flowerColor: flower_color, // Adjust this as well if you want to maintain your variable naming convention
-    hasFlowers: has_flowers, // Adjust this to correctly map
-    hasLeaves: has_leaves, // Adjust this to correctly map
-    hasFruitsOrSeeds: has_fruitsorseeds // Correct the mapping
+    flowerColor: flower_color,
+    hasFlowers: has_flowers,
+    hasLeaves: has_leaves, 
+    hasFruitsOrSeeds: has_fruitsorseeds 
   } = req.body;
-
-  // console.log("Received form data:", req.body); 
-
-  // console.log('has_fruitsorseeds:', has_fruitsorseeds);  // Check the value
-  // console.log('Type of has_fruitsorseeds:', typeof has_fruitsorseeds);  // Check the type
 
   const plantid = generateRandomID();
   const createddate = new Date();
   var image = req.file.path;
-
-// Remove 'public\' from the filePath
   image = image.replace('public\\', '');
-  // console.log(image)
-
   try {
     const newPlant = new Plant({
       plantid, name, description, image, latitude, longitude, createdby,
@@ -43,40 +35,40 @@ exports.createPlant = async (req, res) => {
 
     await newPlant.save();
 
-    res.redirect("/");  // Adjust as necessary for your URL structure
+    res.redirect("/"); 
   } catch (error) {
     console.error("Error creating plant:", error);
     res.status(400).json({ message: "Failed to create plant" });
   }
 };
 
+/**
+ * Generate a random ID.
+ * @returns {string} - The generated random ID.
+ */
 function generateRandomID() {
-  return Math.floor(Math.random() * 1000000).toString();  // Ensures a more unique ID
+  return Math.floor(Math.random() * 1000000).toString(); 
 }
-
-exports.getAllPlantsHomepage = async (req, res) => {
-  try {
-    const plants = await Plant.find();  // Example, assuming Plant is your Mongoose model
-    // return plants;  // Return the data to be used by the caller
-    // res.json({plants})
-    return [];
-  } catch (error) {
-    console.error('Error fetching plants:', error);
-    throw error;  // Throw the error to be handled by the caller
-  }
-};
-
+/**
+ * Get all plants.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 exports.getAllPlants = async (req, res) => {
   try {
-    const plants = await Plant.find();  // Example, assuming Plant is your Mongoose model
-    // return plants;  // Return the data to be used by the caller
+    const plants = await Plant.find();
     res.json({ plants })
   } catch (error) {
     console.error('Error fetching plants:', error);
-    throw error;  // Throw the error to be handled by the caller
+    throw error;
   }
 };
 
+/**
+ * Search for a plant by name using DBpedia.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 exports.searchPlant = async (req, res) => {
   const plantName = req.query.name;
   if (!plantName) {
@@ -110,7 +102,7 @@ exports.searchPlant = async (req, res) => {
       res.json({
         label: bindings.label.value,
         description: bindings.description.value,
-        url: `http://dbpedia.org/page/${encodeURIComponent(plantName)}`  // Add the DBpedia URL to the response
+        url: `http://dbpedia.org/page/${encodeURIComponent(plantName)}`
       });
     } else {
       res.status(404).json({
@@ -124,9 +116,11 @@ exports.searchPlant = async (req, res) => {
   }
 };
 
-
-// File: controllers/plantController.js
-
+/**
+ * Get sorted plants based on query parameters.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 exports.getSortedPlants = async (req, res) => {
   const { sort, order = 'desc', has_flowers, has_leaves, has_fruitsorseeds } = req.query;
   let query = {};
@@ -136,12 +130,11 @@ exports.getSortedPlants = async (req, res) => {
   if (has_fruitsorseeds) query.has_fruitsorseeds = has_fruitsorseeds === 'true';
 
   try {
-    // Construct a sort object dynamically based on the query params
     let sortOptions = {};
     if (sort) {
       sortOptions[sort] = order === 'desc' ? -1 : 1;
     } else {
-      sortOptions['createddate'] = -1; // Default sorting
+      sortOptions['createddate'] = -1; 
     }
 
     let plants = await Plant.find(query).sort(sortOptions);
@@ -152,7 +145,11 @@ exports.getSortedPlants = async (req, res) => {
   }
 };
 
-
+/**
+ * Get a plant by its ID.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 exports.getPlantById = async (req, res) => {
   const { plantid } = req.params;
   try {
@@ -162,12 +159,16 @@ exports.getPlantById = async (req, res) => {
       return res.status(404).json({ message: "Plant not found" });
     }
     res.json(plant);
-    // return json(plant);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
+/**
+ * Add an identification suggestion to a plant.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 exports.postPlantIdentification = async (req, res) => {
   const { plantid } = req.params;
   const { suggestedname, identifiedby } = req.body;
@@ -203,6 +204,11 @@ exports.postPlantIdentification = async (req, res) => {
   }
 }
 
+/**
+ * Approve a suggested plant identification.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 exports.approveSuggestion = async (req, res) => {
   const { plantid } = req.params;
   const { suggestedname } = req.body;
@@ -227,12 +233,17 @@ exports.approveSuggestion = async (req, res) => {
   }
 }
 
+/**
+ * Update the plant identification status.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 exports.updatePlantIdentificationStatus = async (req, res) => {
   const { plantid } = req.params;
   const plantidentificationStatus = true;
   try {
-    console.log("PLANT ID: ", plantid); // Corrected variable name
-    console.log("IDENT STATUS: ", true); // Corrected variable name
+    console.log("PLANT ID: ", plantid);
+    console.log("IDENT STATUS: ", true); 
     
     const plant = await Plant.findOneAndUpdate(
       { plantid: plantid },
@@ -249,6 +260,11 @@ exports.updatePlantIdentificationStatus = async (req, res) => {
   }
 }
 
+/**
+ * Update the name and description of a plant.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 exports.updateNameandDescription = async (req, res) => {
   const { plantid } = req.params;
   const { editedname, editeddescription } = req.body;
@@ -274,24 +290,25 @@ exports.updateNameandDescription = async (req, res) => {
   }
 }
 
-
+/**
+ * Add a comment to a plant.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 exports.addComment = async (req, res) => {
   const { plantid } = req.params;
   const { comment, commentedby, updateCommentId } = req.body;
 
-  // Error handling for missing data (plantid and comment are still required)
   if (!plantid || !comment) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
   try {
-    // Find the plant by ID
     const plant = await Plant.findOne({ plantid });
 
     if (!plant) {
       return res.status(404).json({ message: 'Plant not found' });
     }
-      // Find the comment
       const commentIndex = plant.comments.findIndex(x => x.comment === comment && x.commentedby === commentedby);
 
       if (commentIndex === -1) {
@@ -301,11 +318,9 @@ exports.addComment = async (req, res) => {
         comment : comment,
       };
 
-      // Add the new comment to the plant's comments array
       plant.comments.push(newComment);
       }   
 
-    // Save the updated plant document
     const updatedPlant = await plant.save();
     return res.status(200).json({ message: 'Comment added successfully', comment: updatedPlant.comments });
 
@@ -317,12 +332,16 @@ exports.addComment = async (req, res) => {
 
 }
 
+/**
+ * Get comments for a plant.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 exports.getComments = async (req, res) => {
   const { plantid } = req.params;
 
   try {
     const plant = await Plant.findOne({ plantid });
-    // fetch comments
     const comments = plant.comments;
     res.json({ comments });
   }
@@ -332,8 +351,11 @@ exports.getComments = async (req, res) => {
   }
 }
 
-// Add this function
-// Function to get a plant by its ID from the database
+/**
+ * Get a plant by its ID from the database.
+ * @param {string} plantId - The ID of the plant.
+ * @returns {Promise<Object>} - The plant object.
+ */
 const getPlantByIdFromDB = async (plantId) => {
   try {
       const plant = await Plant.findOne({ plantid: plantId });
@@ -344,7 +366,12 @@ const getPlantByIdFromDB = async (plantId) => {
   }
 };
 
-// Function to update a plant in the database
+
+/**
+ * Update a plant in the database.
+ * @param {Object} plant - The plant object to update.
+ * @returns {Promise<void>} - A promise that resolves when the plant is updated.
+ */
 const updatePlantInDB = async (plant) => {
   try {
       await plant.save();
@@ -354,7 +381,11 @@ const updatePlantInDB = async (plant) => {
   }
 };
 
-// Function to handle liking a plant
+/**
+ * Like a plant.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 exports.likePlant = async (req, res) => {
   const plantId = req.params.plantid;
   try {
@@ -363,10 +394,9 @@ exports.likePlant = async (req, res) => {
           return res.status(404).send({ message: 'Plant not found' });
       }
 
-      plant.likes = (plant.likes || 0) + 1; // Increment the like count
+      plant.likes = (plant.likes || 0) + 1; 
 
-      await updatePlantInDB(plant); // Save the updated plant
-
+      await updatePlantInDB(plant); 
       res.status(200).send({ message: 'Plant liked successfully', likes: plant.likes });
   } catch (err) {
       console.error('Error while liking the plant:', err);

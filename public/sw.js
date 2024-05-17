@@ -1,37 +1,15 @@
-// Inside your Service Worker
+// Import utility script for IndexedDB operations
 importScripts('./util/idb-utility.js');
 
-// Install event to pre-cache resources for the plant project.
-// self.addEventListener('install', event => {
-//     console.log('Service Worker: Installing....');
-//     event.waitUntil((async () => {
-//         console.log('Service Worker: Caching Plant App Shell...');
-//         try {
-//             const cache = await caches.open("plant-static");
-//             // await cache.addAll([
-//             //     '/',
-//             //     '/plants', // Page listing all plants
-//             //     '/manifest.json',
-//             //     '/util/insert.js', // Script for plant interactions
-//             //     '/util/index.js',
-//             //     '/util/idb-utility.js',
-//             //     '/stylesheets/style.css',
-//             //     '/images/Drought.svg', // Icon for the plant app
-//             //     '/images/plant.gif',
-//             //     '/images/logo.svg'
-//             // ]);
-//             console.log('Service Worker: Plant App Shell Cached');
-//         } catch (error) {
-//             console.error("Error occurred while caching:", error);
-//         }
-//     })());
-// });
+/**
+ * Install event to cache the initial application shell.
+ * @event install
+ */
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open('plant-static')
             .then(cache => {
                 console.log('Opened cache');
-                // return cache.addAll(urlsToCache);
                 cache.addAll([
                 '/']);
                 return cache;
@@ -43,7 +21,10 @@ self.addEventListener('install', event => {
 });
 
 
-// Activate event to clean up old caches.
+/**
+ * Activate event to clean up old caches.
+ * @event activate
+ */
 self.addEventListener('activate', event => {
     event.waitUntil(
         (async () => {
@@ -58,24 +39,13 @@ self.addEventListener('activate', event => {
     );
 });
 
-// Fetch event to use cache first strategy.
-// self.addEventListener('fetch', event => {
-//     event.respondWith((async () => {
-//         const cache = await caches.open("plant-static");
-//         const cachedResponse = await cache.match(event.request);
-//         if (cachedResponse) {
-//             console.log('Service Worker: Serving from Cache:', event.request.url);
-//             return cachedResponse;
-//         }
-//         console.log('Service Worker: Fetching from Network:', event.request.url);
-//         return fetch(event.request);
-//     })());
-// });
-
+/**
+ * Fetch event to serve cached content when offline and cache new requests.
+ * @event fetch
+ */
 self.addEventListener('fetch', event => {
     event.respondWith(
         fetch(event.request).then(response => {
-            // Check if we received a valid response
             if (response && response.status === 200 && response.type === 'basic') {
                 // IMPORTANT: Clone the response. A request is a stream and
                 // can only be consumed once. Since we are consuming this
@@ -94,8 +64,6 @@ self.addEventListener('fetch', event => {
                 if (response) {
                     return response;
                 }
-                // If not found in the cache either, return a default fallback (if applicable)
-                // or just return an error message or empty response as appropriate.
                 return new Response("Unable to fetch data, and no cache available.", {
                     status: 404,
                     statusText: 'Not Found'
@@ -105,7 +73,10 @@ self.addEventListener('fetch', event => {
     );
 });
 
-
+/**
+ * Sync event to synchronize new plant data when the connection is back online.
+ * @event sync
+ */
 self.addEventListener('sync', event => {
     if (event.tag === 'sync-plant-data') {
         console.log('Service Worker: Syncing new Plants');
@@ -127,12 +98,6 @@ self.addEventListener('sync', event => {
                             method: 'POST',
                             body: formData
                         })
-                        // .then(response => {
-                        //     if (!response.ok) {
-                        //         throw new Error('Failed to sync plant');
-                        //     }
-                        //     return response.json();
-                        // })
                         .then(data => {
                             console.log('Service Worker: Plant synced successfully:', data);
                             deleteSyncPlantFromIDB(plantDB, plant.id);

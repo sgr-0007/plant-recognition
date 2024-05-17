@@ -10,10 +10,17 @@ if (storedUsername) {
     localStorage.setItem("username", name);
 }
 
+/**
+ * Checks if the user is online.
+ * @returns {boolean} - Returns true if the user is online, false otherwise.
+ */
 function isOnline() {
     return navigator.onLine;
 }
 
+/**
+ * Initializes the comments chat functionality by setting up the plant ID, room number, and socket events.
+ */
 function init() {
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -41,8 +48,7 @@ function init() {
 }
 
 /**
- * It gets the text to send from the interface
- * and sends the message via  socket
+ * Sends the chat text to the server and handles offline interaction.
  */
 function sendChatText() {
     if (!isOnline()) {
@@ -100,6 +106,11 @@ function sendChatText() {
 
 }
 
+/**
+ * Saves the chat text to the server.
+ * @param {string} chatTextInput - The chat text to be saved.
+ * @param {number} commentId - The ID of the comment.
+ */
 function saveChat(chatTextInput, commentId) {
     let chatText = chatTextInput;
     let chat = {
@@ -129,6 +140,9 @@ function saveChat(chatTextInput, commentId) {
         });
 }
 
+/**
+ * Fetches the chat history from the server and displays it.
+ */
 function getChat() {
     fetch(`http://localhost:3000/api/plantdetails/${plantid}/comments`, {
         method: 'GET',
@@ -150,6 +164,9 @@ function getChat() {
         });
 }
 
+/**
+ * Syncs the locally stored chat comments with the server when the network is available.
+ */
 function getIdbChatAndPushIntoNetworkDb() {
     openPlantsIDB().then((db) => {
         const plantId = parseInt(plantid);
@@ -170,21 +187,23 @@ function getIdbChatAndPushIntoNetworkDb() {
 }
 
 
-// call getsychchat when the network is online using event listener
+// Event listener to sync comments when the network is back online
 window.addEventListener('online', () => {
     alert("You are back online. Your comments will be synced now.");
     getIdbChatAndPushIntoNetworkDb();
 });
  
-
+/**
+ * Connects the user to the chat room.
+ */
 function connectToRoom() {
 
     if (!name) name = 'Unknown-' + Math.random();
     socket.emit('create or join', roomNo, name);
 }
 /**
- * it appends the given html text to the history div
- * @param text: teh text to append
+ * Appends the given HTML text to the history div.
+ * @param {string} text - The text to append.
  */
 function writeOnHistory(text) {
     let history = document.getElementById('history');
@@ -195,9 +214,9 @@ function writeOnHistory(text) {
 }
 
 /**
- * it hides the initial form and shows the chat
- * @param room the selected room
- * @param userId the user name
+ * Hides the initial form and shows the chat interface.
+ * @param {string} room - The selected room.
+ * @param {string} userId - The user name.
  */
 function hideLoginInterface(room, userId) {
 

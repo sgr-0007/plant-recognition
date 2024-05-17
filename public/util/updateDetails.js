@@ -1,16 +1,25 @@
+// Import IndexedDB utility if running in a worker environment
+
 if ("undefined" === typeof window) {
   importScripts("./util/idb-utility.js");
 }
 
 let plantIDVar = "";
 
+/**
+ * Closes the modal dialog.
+ * @param {HTMLElement} modal - The modal element to close.
+ */
 function closeModal(modal) {
   modal.style.display = "none";
 }
 
+// Event listener for when the DOM is fully loaded
+
 document.addEventListener("DOMContentLoaded", function () {
   const approveButtons = document.querySelectorAll(".approve-button");
 
+    // Add click event listeners to approve buttons
   approveButtons.forEach((button) => {
     button.addEventListener("click", function () {
       const plantid = this.getAttribute("data-plantid");
@@ -21,10 +30,13 @@ document.addEventListener("DOMContentLoaded", function () {
       approveSuggestion(plantid, identifiedBy);
     });
   });
-
-  // Plant id for edited
 });
 
+/**
+ * Approves the suggested name for a plant, updating either the local IndexedDB or the online database based on the availabilty of network.
+ * @param {string} plantID - The ID of the plant.
+ * @param {string} suggestedName - The suggested name for the plant.
+ */
 function approveSuggestion(plantID, suggestedName) {
   if (!navigator.onLine) {
     openPlantsIDB()
@@ -73,6 +85,12 @@ function approveSuggestion(plantID, suggestedName) {
   }
 }
 
+/**
+ * Approves the suggested name for a plant by sending a request to the online database.
+ * @param {string} plantid - The ID of the plant.
+ * @param {string} suggestedname - The suggested name for the plant.
+ */
+
 function approveSuggestedName(plantid, suggestedname) {
   const payload = { suggestedname: suggestedname };
   fetch(`http://localhost:5000/api/${plantid}/approvesuggestion`, {
@@ -104,6 +122,12 @@ function approveSuggestedName(plantid, suggestedname) {
     });
 }
 
+/**
+ * Updates the plant data in the IndexedDB.
+ * @param {IDBDatabase} db - The IndexedDB database instance.
+ * @param {object} updatedPlant - The updated plant data.
+ * @returns {Promise} - A promise that resolves when the update is successful.
+ */
 function updatePlant(db, updatedPlant) {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction("plants", "readwrite");
@@ -120,6 +144,9 @@ function updatePlant(db, updatedPlant) {
   });
 }
 
+/**
+ * Syncs the approved suggestion from IndexedDB to the online database.
+ */
 function getIDBSuggestionApprovalAndPushIntoNetworkDb() {
   openPlantsIDB().then((db) => {
     const plantId = parseInt(plantIDVar);
@@ -140,8 +167,10 @@ function getIDBSuggestionApprovalAndPushIntoNetworkDb() {
   });
 }
 
-// Code for edited name and description
-
+/**
+ * Saves edited changes (name and description) of a plant.
+ * @param {string} plantid - The ID of the plant.
+ */
 function saveEditedChanges(plantid) {
   console.log("Clicked on save changes");
   console.log("Plant id: ", plantid);
@@ -157,6 +186,12 @@ function saveEditedChanges(plantid) {
   updateNameAndDescription(plantid, editedname, editeddescription);
 }
 
+/**
+ * Updates the name and description of a plant, either in the local IndexedDB or the online database.
+ * @param {string} plantID - The ID of the plant.
+ * @param {string} editedname - The edited name of the plant.
+ * @param {string} editeddescription - The edited description of the plant.
+ */
 function updateNameAndDescription(plantID, editedname, editeddescription) {
   if (!navigator.onLine) {
     openPlantsIDB()
@@ -200,6 +235,12 @@ function updateNameAndDescription(plantID, editedname, editeddescription) {
   }
 }
 
+/**
+ * Updates the name and description of a plant in the online database.
+ * @param {string} plantid - The ID of the plant.
+ * @param {string} editedname - The edited name of the plant.
+ * @param {string} editeddescription - The edited description of the plant.
+ */
 function updateNameAndDescriptionOnline(
   plantid,
   editedname,
@@ -230,6 +271,9 @@ function updateNameAndDescriptionOnline(
     });
 }
 
+/**
+ * Syncs the updated name and description from IndexedDB to the online database.
+ */
 function getIDBUpdatedNameAndDescriptionAndPushIntoNetworkDB() {
   openPlantsIDB().then((db) => {
     const plantId = parseInt(plantIDVar);
@@ -253,7 +297,7 @@ function getIDBUpdatedNameAndDescriptionAndPushIntoNetworkDB() {
   });
 }
 
-// When the system comes back online
+// Event listener for when the system comes back online
 window.addEventListener("online", () => {
   alert(
     "You are online. Approved suggestions and edited name, description will be synced now"

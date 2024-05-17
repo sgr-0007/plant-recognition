@@ -20,14 +20,11 @@ document.addEventListener("DOMContentLoaded", function () {
           position.coords.latitude;
         document.getElementById("longitudeInput").value =
           position.coords.longitude;
-        // alert("Location retrieved successfully.");
-        // document.getElementById("plantForm").submit(); // Automatically submit the form
       } catch (error) {
         console.error("Error retrieving location:", error);
       }
     });
 
-  // Code for the characteristics switches
   const switches = document.querySelectorAll('input[type="checkbox"]');
 
   // Loop through each switch
@@ -39,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Code for changing the values of the new post form or the suggestion if the user is logged in
+  // Changing the values of the new post form or the suggestion if the user is logged in
   var storedUsername = localStorage.getItem("username");
   if (storedUsername) {
     document.getElementById("userNickname").value = storedUsername;
@@ -61,8 +58,8 @@ async function getCurrentPosition() {
 function logout() {
   localStorage.removeItem("username");
   alert("Logged out successfully.");
-  document.getElementById("loginButton").style.display = "block"; // Show login button
-  document.getElementById("logoutButton").style.display = "none"; // Hide logout button
+  document.getElementById("loginButton").style.display = "block";
+  document.getElementById("logoutButton").style.display = "none"; 
   location.reload();
 }
 
@@ -71,8 +68,8 @@ function login() {
   if (username) {
     localStorage.setItem("username", username);
     alert("Logged in successfully as " + username);
-    document.getElementById("loginButton").style.display = "none"; // Hide login button
-    document.getElementById("logoutButton").style.display = "block"; // Show logout button
+    document.getElementById("loginButton").style.display = "none";
+    document.getElementById("logoutButton").style.display = "block";
     location.reload();
   } else {
     alert("Please enter a username.");

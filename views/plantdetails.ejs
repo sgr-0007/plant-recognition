@@ -215,18 +215,15 @@
       </div>
     </div>
   </div>
-  <!-- completeIDButton -->
   <script>
     window.addEventListener('load', function () {
       const loggedInUser = localStorage.getItem('username');
       const plantUser = '<%= plantDetails.createdby %>';
       if (loggedInUser === plantUser) {
-        // console.log('same name')
         document.getElementById('suggestionsCard').style.display = 'block';
         document.getElementById('editButton').style.display = 'block';
         document.getElementById('completeIDButton').style.display = 'block';
       } else {
-        // console.log('not same name')
         document.getElementById('suggestionsCard').style.display = 'none';
         document.getElementById('editButton').style.display = 'none';
         document.getElementById('completeIDButton').style.display = 'none';

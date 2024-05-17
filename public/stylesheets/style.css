@@ -7,7 +7,7 @@ body {
 }
 
 .custom-navbar-color {
-  background-color: #0e0e10; /* Your custom color */
+  background-color: #0e0e10;
 }
 
 .custom_bg_color {
@@ -16,7 +16,7 @@ body {
 
 .custom_login_button_color {
   background-color: #22338f;
-  border-color: #22338f; /* If you want to change the border color */
+  border-color: #22338f; 
   color: #ffffff;
 }
 
@@ -26,11 +26,11 @@ body {
 }
 
 .custom-button:hover {
-  background-color: #e2e2e2; /* Change to your desired hover color */
+  background-color: #e2e2e2; 
 }
 
 .custom-ul-text-white li.nav-item a.nav-link {
-  color: white; /* Set text color to white */
+  color: white; 
 }
 
 

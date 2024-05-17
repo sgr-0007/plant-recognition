@@ -14,26 +14,18 @@ var plantDetailsRouter = require('./fe-routes/plantdetails');
 
 
 
-// MongoDB URL
 const PORT = process.env.PORT || 5000;
-//please enter your local MONGO creds, It's working for me. 
-const mongoDB = 'mongodb+srv://faiqiqbal37:plant1234@plant-recognition.abudcv7.mongodb.net/';
-// const mongoDB = 'mongodb://localhost:27017/plantDb'
 
-// Connect to MongoDB
+const mongoDB = 'mongodb+srv://faiqiqbal37:plant1234@plant-recognition.abudcv7.mongodb.net/';
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.log(err))
 
 var app = express();
-// const { Client } = require('sparql-http-client');
-
 app.use(cors());
 
 
 app.use('/node_modules', express.static(__dirname + '/node_modules'));
-
-// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
