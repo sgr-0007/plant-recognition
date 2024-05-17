@@ -32,6 +32,8 @@ This progressive web application allows users to record and view plant sightings
    ```
 
 2. **Access the Application:**
+
+   **It is recommended to clear the cache before accessing the application**
    Open a web browser and navigate to `http://localhost:3000` to start using the application.
 ### Using the application
 On the landing page, the user is given the option to ‘Login’ with their username. 
