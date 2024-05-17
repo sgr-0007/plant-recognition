@@ -1,5 +1,6 @@
 # Plant Recognition Web Application
 
+Github repo @ https://github.com/sgr-0007/plant-recognition
 This progressive web application allows users to record and view plant sightings, assist with identification, and engage in discussions through a real-time chat feature. This application was developed as part of the COM3504/COM6504 The Intelligent Web assignment.
 
 ## Installation
