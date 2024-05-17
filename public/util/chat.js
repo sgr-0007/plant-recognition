@@ -129,11 +129,6 @@ function saveChat(chatTextInput, commentId) {
         .then(response => response.json())
         .then(data => {
             console.log('ChatSuccess:', data);
-            data.comments.forEach(comment => {
-                let who = comment.commentedby
-                if (comment.commentedby === name) who = 'Me';
-                writeOnHistory('<b>' + who + ':</b> ' + comment.comment);
-            });
         })
         .catch((error) => {
             console.error('ChatError:', error);
