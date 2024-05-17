@@ -63,7 +63,7 @@ The search bar can be used to search for a particular plant post.
 
 ## Offline Capabilities
 
-- **Adding and Storing Sightings:** The application supports offline capabilities where users can add new plant sightings which are stored locally and synced when the device is online again.
+- **Adding and Storing Sightings:** The application supports offline capabilities where users can add new plant sightings and add comments which are stored in indexed db and synced when the device is online again.
 
 ## Data Storage
 
