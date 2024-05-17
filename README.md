@@ -63,7 +63,7 @@ The search bar can be used to search for a particular plant post.
 
 ## Offline Capabilities
 
-- **Adding and Storing Sightings:** The application supports offline capabilities where users can add new plant sightings which are stored locally and synced when the device is online again.
+- **Adding and Storing Sightings:** The application supports offline capabilities where users can add new plant sightings and add comments which are stored in indexed db and synced when the device is online again.
 
 ## Data Storage
 
@@ -72,101 +72,6 @@ The search bar can be used to search for a particular plant post.
 
 ## Additional Notes
 
-- Ensure MongoDB is properly installed and running locally before starting the application.
+- MongoDb has been hosted on Mongo Atlas.
 - The application is designed to be progressive and can be used on various devices including mobile phones and laptops.
 - DBpedia integration requires an active internet connection to fetch data in real-time.
-
-
-###Code Documentation:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-###Screenshots:
-
-Landing page with no plants added
-
-
-Figure 1: Landing page with no plants added
-
-User login:
-
-         
-                  Figure 2a: User login                                     Figure 2b: Login success alert
-
-
-
-
-
-New plant post form:
-
-
-Figure 3: Add new plant post form
-
-Plants added to the list:
-
-Figure 4: Plants post list
-Plant getting synced once system comes online:
-
-
-Figure 5: Plant synced to online db alert
-
-Plant details screen:
-
-
-Figure 6: Plant details screen
-
-
-
-
-
-Add plant suggestion form:
-
-
-Figure 7: Add suggestions for plant
-
-Edit plant name and/or description:
-
-
-Figure 8: Edit plant name and/or description
-
-Plants sort functionality:
-
-
-Figure 9: Plants sorting functionality
