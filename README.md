@@ -1,8 +1,172 @@
-# plant-recognition
-A Plant Recognition progressive web application that provides users with means to record and view plants and also to help with the identification.
+# Plant Recognition Web Application
+
+This progressive web application allows users to record and view plant sightings, assist with identification, and engage in discussions through a real-time chat feature. This application was developed as part of the COM3504/COM6504 The Intelligent Web assignment.
+
+## Installation
+
+### Prerequisites
+
+- Node.js
+- npm (Node Package Manager)
+- MongoDB running on the default port
+
+### Setup Instructions
+
+1. **Clone the project:**
+git clone <projecturl>
+
+2. **Navigate to the Project Directory:**
+   ```bash
+   cd plant-recognition
+   ```
+
+3. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
+
+### Running the Application
+
+1. **Start the Server using the EJS bin File:**
+   Start the server by the running the command below
+   ```bash
+   node ./bin/www
+   ```
+   OR
+   ```bash
+   npm run start
+   ```
+
+2. **Access the Application:**
+   Open a web browser and navigate to `http://localhost:3000` to start using the application.
+### Using the application
+On the landing page, the user is given the option to ‘Login’ with their username. 
+After logging in, click on the ‘New Post’ button on the navbar.
+Fill in the details of the plant in the new post form and click on ‘Post’.
+This application supports offline mode as well. So, even if the user is offline/disconnected from the network, this new post form will be able to store the plant details in the IDB and will automatically sync the changes to the network DB as soon as the system comes back online.
+Once the plant post is visible, the post user has the option to navigate to the plant details screens, which contains the chat option for the post where they can post a comment.
+Other users can view the post, add a like on it and/or post a suggestion by clicking on the ‘Suggest‘ in the bottom right corner.
+On the plant details screen, only the user who originally posted the plant is able to:
+View suggestions (suggested by other users) and approve the suggestion.
+View plant details from DBPedia 
+Edit the plant name and description 
+complete the identification status of the plant.  
+To make viewing posts easy, the user can make use of Sort functionality, which sorts the posts by ‘Newest’, ‘Oldest’ or ‘Name’.
+The search bar can be used to search for a particular plant post.
+
+## Features
+
+- **Add Plant Sightings:** Users can add new plant sightings with details like date, time, location, plant description, and photos.
+- **View and Sort Plant Sightings:** Sightings can be viewed and sorted by date/time or by distance (stretch goal).
+- **Real-Time Chat:** Discuss plant details in real-time through a chat system integrated with each plant sighting.
+- **SPARQL DBpedia Query:** The application integrates SPARQL queries to fetch detailed plant information from the DBpedia knowledge graph. When a plant's identification needs further information or verification, the system queries DBpedia to retrieve the scientific name, common name, and a detailed English description along with a URI linking to the full DBpedia entry.
+
+## Offline Capabilities
+
+- **Adding and Storing Sightings:** The application supports offline capabilities where users can add new plant sightings which are stored locally and synced when the device is online again.
+
+## Data Storage
+
+- **MongoDB:** Used for storing all plant sighting data and user comments.
+- **indexedDB:** Used for local storage of new plant entries when the device is offline.
+
+## Additional Notes
+
+- Ensure MongoDB is properly installed and running locally before starting the application.
+- The application is designed to be progressive and can be used on various devices including mobile phones and laptops.
+- DBpedia integration requires an active internet connection to fetch data in real-time.
 
 
--> clone the repo
--> install node packages : npm install
--> run locally : npm start 
-  launch the web app @ http://localhost:3000
+###Code Documentation:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###Screenshots:
+
+Landing page with no plants added
+
+
+Figure 1: Landing page with no plants added
+
+User login:
+
+         
+                  Figure 2a: User login                                     Figure 2b: Login success alert
+
+
+
+
+
+New plant post form:
+
+
+Figure 3: Add new plant post form
+
+Plants added to the list:
+
+Figure 4: Plants post list
+Plant getting synced once system comes online:
+
+
+Figure 5: Plant synced to online db alert
+
+Plant details screen:
+
+
+Figure 6: Plant details screen
+
+
+
+
+
+Add plant suggestion form:
+
+
+Figure 7: Add suggestions for plant
+
+Edit plant name and/or description:
+
+
+Figure 8: Edit plant name and/or description
+
+Plants sort functionality:
+
+
+Figure 9: Plants sorting functionality
