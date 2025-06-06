@@ -1,7 +1,7 @@
 # Plant Recognition Web Application
 
 Github repo @ https://github.com/sgr-0007/plant-recognition
-This progressive web application allows users to record and view plant sightings, assist with identification, and engage in discussions through a real-time chat feature. This application was developed as part of the COM3504/COM6504 The Intelligent Web assignment.
+This progressive web application allows users to record and view plant sightings, assist with identification, and engage in discussions through a real-time chat feature. This application was developed as part of the COM3504/COM6504 The Intelligent Web coursework.
 
 ## Installation
 
@@ -13,7 +13,7 @@ This progressive web application allows users to record and view plant sightings
 
 ### Setup Instructions
 
-1. **Navigate to the Project's root directory (Team_Msc06/solution/):**
+1. **Navigate to the Project's root directory:**
 
 2. **Install Dependencies:**
    ```bash
@@ -33,9 +33,6 @@ This progressive web application allows users to record and view plant sightings
    ```
 
 2. **Access the Application:**
-
-   **It is recommended to clear the cache before accessing the application**.
-Launch any web browser and go to http://localhost:3000 to begin using the application.
 
 ### Using the application
 On the landing page, the user is given the option to ‘Login’ with their username. 
